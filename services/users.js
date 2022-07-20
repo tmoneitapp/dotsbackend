@@ -26,9 +26,8 @@ async function getLogin(username, password){
         FROM users 
         WHERE username = '${username}' limit 1;`
     );
-    console.log(rows);
-    console.log(rows.affectedRows);
-    if(rows.affectedRows){
+    
+    if(rows){
         let password_hash = crypto.createHash('md5').update(password).digest('hex');
         console.log(password);
         console.log(password_hash);
