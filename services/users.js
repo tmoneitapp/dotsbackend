@@ -3,6 +3,7 @@ const helper = require('../helper');
 const config = require('../config');
 const { authenticate } = require('passport');
 const error = require('../shared/error');
+const crypto = require('crypto');
 
 async function getMultiple(){
     const rows = await db.query(
