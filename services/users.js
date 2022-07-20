@@ -2,6 +2,7 @@ const db = require('./db');
 const helper = require('../helper');
 const config = require('../config');
 const { authenticate } = require('passport');
+const error = require('../shared/error');
 
 async function getMultiple(){
     const rows = await db.query(
@@ -28,10 +29,10 @@ async function getLogin(username, password){
             return rows;
         }
         else{
-            return 'Invalid password';
+            return error.USER_INVALID_PASSWORD;
         }
     }
-    return 'Invalid username and password';
+    return error.USER_INVALID_USERNAME;
 }
 
 async function create(user){
