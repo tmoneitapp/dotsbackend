@@ -17,7 +17,7 @@ async function getLogin(username, password){
         `SELECT id, name, username, email, userlevel, sektor, cost, 
         mobile_no, del_no, staff_id, entgov, funct, timestamp, password
         FROM users 
-        WHERE username = ${username} limit 1`
+        WHERE username = '${username}' limit 1`
     );
     if(rows.affectedRows){
         let password_hash = crypto.createHash('md5').update(password).digest('hex');
