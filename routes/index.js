@@ -12,7 +12,7 @@ router.get('/', function(req, res, next) {
   res.statusCode = 200;
   res.setHeader('Content-Type','application/json');
   //res.end(password_hash);
-  //res.end('no result return');
+  res.end('no result return');
 
   
 });
