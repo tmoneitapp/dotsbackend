@@ -21,7 +21,10 @@ async function getLogin(username, password){
     );
     if(rows.affectedRows){
         let password_hash = crypto.createHash('md5').update(password).digest('hex');
-        if(rows[0].password != password_hash){
+        console.log(password);
+        console.log(password_hash);
+        console.log(rows[0].password);
+        if(rows[0].password === password_hash){
             return rows;
         }
         else{
