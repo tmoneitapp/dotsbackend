@@ -21,17 +21,17 @@ async function getLogin(username, password){
         FROM users 
         WHERE username = '${username}' limit 1; `
     );
-    console.log(
-        `SELECT id, name, username, email, userlevel, sektor, cost, 
-        mobile_no, del_no, staff_id, entgov, funct, timestamp, password 
-        FROM users 
-        WHERE username = '${username}' limit 1;`
-    );
-    console.log(rows);
+    // console.log(
+    //     `SELECT id, name, username, email, userlevel, sektor, cost, 
+    //     mobile_no, del_no, staff_id, entgov, funct, timestamp, password 
+    //     FROM users 
+    //     WHERE username = '${username}' limit 1;`
+    // );
+    // console.log(rows);
     if(rows.length != 0){
         let password_hash = crypto.createHash('md5').update(password).digest('hex');
-        console.log(password_hash);
-        console.log(rows[0].password);
+        // console.log(password_hash);
+        // console.log(rows[0].password);
         if(rows[0].password === password_hash){
             return rows;
         }

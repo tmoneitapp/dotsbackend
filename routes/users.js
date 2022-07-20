@@ -20,7 +20,7 @@ router.get('/', (req, res, next) =>{
 router.post('/login', (req,res,next) =>{
   users.getLogin(req.body.username, req.body.password)
   .then((user) =>{
-    console.log(user);
+    //console.log(user);
       if(user == error.USER_INVALID_PASSWORD){
         res.statusCode =200;
         res.setHeader('Content-Type','application/json');
@@ -32,7 +32,7 @@ router.post('/login', (req,res,next) =>{
         res.json({success:false, status: error.USER_INVALID_USERNAME});
       }
       else {
-        var token = authenticate.getToken({ _id: user.userid});
+        var token = authenticate.getToken({ _id: user.username});
         res.statusCode = 200;
         res.setHeader('Content-Type','application/json');
         res.json({success:true, token: token, status: 'You are successfully logged in'});
