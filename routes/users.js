@@ -32,6 +32,8 @@ router.post('/login', (req,res,next) =>{
         res.json({success:false, status: error.USER_INVALID_USERNAME});
       }
       else {
+        console.log(user.username);
+        console.log(user[0].username);
         var token = authenticate.getToken({ _id: user.username});
         res.statusCode = 200;
         res.setHeader('Content-Type','application/json');
