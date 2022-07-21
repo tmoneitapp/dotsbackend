@@ -16,6 +16,8 @@ async function create(order){
     let sql ='';
     console.log(order);
     console.log(order.length);
+    console.log(order[0].id);
+    console.log(order[1].id);
     
     for(var i= 0; i <= order.length -1; i++){
         if(i=0){
