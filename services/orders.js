@@ -52,7 +52,7 @@ async function create(order){
             , name2, type2, size2
             , name3, type3, size3
             , name4, type4, size4
-            , sc_name, sd_manager, pricing, quaterly
+            , sc_name, sd_manager, pricing, quartely
             , yearly
             ) VALUES ('${order.order_type}', '${order.service_id}', '${order.network_id}', '${order.product_type}'
             , '${order.customer}', '${order.customer_id}', '${order.quantity}', '${order.others}'
@@ -66,7 +66,7 @@ async function create(order){
             , '${order.name2}', '${order.type2}', '${order.size2}'
             , '${order.name3}', '${order.type3}', '${order.size3}'
             , '${order.name4}', '${order.type4}', '${order.size4}'
-            , '${order.sc_name}', '${order.sd_manager}', '${order.pricing}', '${order.quaterly}'
+            , '${order.sc_name}', '${order.sd_manager}', '${order.pricing}', '${order.quartely}'
             , '${order.yearly}'
             )`;
     console.log(sql);
