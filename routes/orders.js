@@ -19,7 +19,7 @@ orderRouter.route('/')
     }, (err) => next(err))
     .catch((err) => next(err));
 })
-.post((req, res, next) =>{
+.post(authenticate.authenticateToken, (req, res, next) =>{
     orders.create(req.body)
     .then((order) =>{
         console.log('Order Created', order);
