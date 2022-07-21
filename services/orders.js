@@ -76,7 +76,7 @@ async function create(order){
     );
     console.log(result);
     let message = error.RECORD_ERROR;
-    if(!result && result.length != 0){
+    if(result.affectedRows){
         message = error.RECORD_CREATED;
     }
     return {message};
