@@ -39,9 +39,14 @@ orderRouter.route('/')
 });
 
 orderRouter.route('/:orderId')
-.get((req, res, next) =>{
-    res.statusCode = 403;
-    res.end('GET operation not ready on /orders');
+.get(authenticate.authenticateToken, (req, res, next) =>{
+    orders.findById(req.params.orderId)
+    .then((order) =>{
+        res.statusCode = 200;
+        res.setHeader('Content-Type','application/json');
+        res.json(order);
+    }, (err) => next(err))
+    .catch((err) => next(err));
 })
 .post((req, res, next) =>{
     res.statusCode = 403;

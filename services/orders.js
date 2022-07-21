@@ -12,6 +12,15 @@ async function getMultiple(){
     return rows;
 }
 
+async function findById(id){
+    const rows = await db.query(
+        `SELECT * 
+        FROM orders 
+        WHERE id = ${id}`
+    );
+    return rows;
+}
+
 async function create(order){
     //let sql = '';
 
@@ -109,6 +118,7 @@ async function remove(id){
 
 module.exports = {
     getMultiple,
+    findById,
     create,
     update,
     remove

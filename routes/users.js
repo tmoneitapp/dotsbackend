@@ -6,12 +6,29 @@ var bcrypt = require('bcryptjs');
 var error = require('../shared/error');
 
 /* GET users listing. */
-router.get('/', (req, res, next) =>{
+router.get('/', authenticate.authenticateToken, (req, res, next) =>{
   users.getMultiple()
   .then((result) =>{
     res.statusCode = 200;
     res.setHeader('Content-Type','application/json');
     res.json(result); 
+  }, (err) => next(err))
+  .catch((err) => next(err));
+});
+
+router.get('/:userId', authenticate.authenticateToken, (req, res, next) =>{
+  users.findByUserId(req.params.userId)
+  .then((user) =>{
+    if(user == error.RECORD_EMPTY){
+      res.statusCode =200;
+      res.setHeader('Content-Type','application/json');
+      res.json({success:false, status: error.RECORD_EMPTY});
+    }
+    else{
+      res.statusCode =200;
+      res.setHeader('Content-Type','application/json');
+      res.json(user);
+    }
   }, (err) => next(err))
   .catch((err) => next(err));
 });
