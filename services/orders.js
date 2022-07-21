@@ -13,9 +13,9 @@ async function getMultiple(){
 }
 
 async function create(order){
-    const sql ='';
+    let sql ='';
     console.log(order);
-    
+
     for(var i= 0; i <= order.length -1; i++){
         if(i=0){
 
