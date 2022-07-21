@@ -5,7 +5,7 @@ const error = require('../shared/error');
 
 async function getMultiple(){
     const rows = await db.query(
-        `SELECT *
+        `SELECT * 
         FROM orders 
         `
     );
@@ -27,7 +27,7 @@ async function createBulk(orders){
     const result = await db.query(
         ``
     );
-
+    return '';
 }
 
 async function update(id, order){

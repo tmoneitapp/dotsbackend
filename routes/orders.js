@@ -11,12 +11,13 @@ orderRouter.use(bodyParser.json());
 orderRouter.route('/')
 .get(authenticate.authenticateToken, (req, res, next) =>{
     orders.getMultiple()
-    .then((result) =>{
+    .then((orders) =>{
+        console.log(orders);
         res.statusCode = 200;
         res.setHeader('Content-Type','application/json');
-        res.json(result); 
-    }, (err) => next(err))
-    .catch((err) => next(err));
+        res.json(orders); 
+    }, (err) => {console.log(err); next(err);})
+    .catch((err) => {console.log(err); next(err);});
 })
 .post((req, res, next) =>{
     res.statusCode = 403;
