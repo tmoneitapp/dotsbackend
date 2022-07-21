@@ -13,6 +13,21 @@ async function getMultiple(){
     return rows;
 }
 
+async function findByUserId(userid){
+    const rows = await db.query(
+        `SELECT id, name, username, email, userlevel, sektor, cost, 
+        mobile_no, del_no, staff_id, entgov, funct, timestamp, userid
+        FROM users 
+        WHERE userid = '${userid}' limit 1; `
+    );
+    if(rows.length != 0){
+        return rows;
+    }
+    else{
+        return error.RECORD_EMPTY;
+    }
+}
+
 async function getLogin(username, password){
     const rows = await db.query(
         `SELECT id, name, username, email, userlevel, sektor, cost, 
@@ -82,6 +97,7 @@ async function remove(id){
 module.exports = {
     getMultiple,
     getLogin,
+    findByUserId,
     create,
     update,
     remove

@@ -17,7 +17,21 @@ router.get('/', (req, res, next) =>{
 });
 
 router.get('/profile', authenticate.authenticateToken, (req, res, next) =>{
-  console.log(res.locals);
+  users.findByUserId(res.locals._id)
+  .then((user) =>{
+    if(user == error.RECORD_EMPTY){
+      res.statusCode =200;
+      res.setHeader('Content-Type','application/json');
+      res.json({success:false, status: error.RECORD_EMPTY});
+    }
+    else{
+      res.statusCode =200;
+      res.setHeader('Content-Type','application/json');
+      res.json(user);
+    }
+  }, (err) => next(err))
+  .catch((err) => next(err));
+  //console.log(res.locals);
 })
 
 router.post('/login', (req,res,next) =>{
