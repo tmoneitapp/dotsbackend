@@ -40,8 +40,7 @@ async function create(order){
     // }
     //console.log(sql);
 
-    const result = await db.query(
-        `INSERT INTO orders('order_type', 'service_id', 'network_id', 'product_type' 
+    let sql =  `INSERT INTO orders('order_type', 'service_id', 'network_id', 'product_type' 
             , 'customer', 'customer_id', 'quantity', 'others'
             , 'remark', 'wiring', 'app_date', 'ae_name'
             , 'staff_id', 'pm_name', 'tid_manager', 'ae_no'
@@ -69,7 +68,11 @@ async function create(order){
             , '${order.name4}', '${order.type4}', '${order.size4}'
             , '${order.sc_name}', '${order.sd_manager}', '${order.pricing}', '${order.quaterly}'
             , '${order.yearly}'
-            )`
+            )`;
+    console.log(sql);
+    
+    const result = await db.query(
+       sql
     );
     console.log(result);
     let message = error.RECORD_ERROR;
