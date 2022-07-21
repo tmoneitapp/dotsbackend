@@ -16,6 +16,10 @@ router.get('/', (req, res, next) =>{
   .catch((err) => next(err));
 });
 
+router.get('/profile', authenticate.authenticateToken, (req, res, next) =>{
+  console.log(res.locals);
+})
+
 router.post('/login', (req,res,next) =>{
   users.getLogin(req.body.username, req.body.password)
   .then((user) =>{
@@ -33,7 +37,7 @@ router.post('/login', (req,res,next) =>{
       else {
         // console.log(user.username);
         // console.log(user[0].username);
-        var token = authenticate.getToken({ _id: user[0].username});
+        var token = authenticate.getToken({ _id: user[0].userid});
         res.statusCode = 200;
         res.setHeader('Content-Type','application/json');
         res.json({success:true, token: token, status: 'You are successfully logged in'});

@@ -16,7 +16,7 @@ async function getMultiple(){
 async function getLogin(username, password){
     const rows = await db.query(
         `SELECT id, name, username, email, userlevel, sektor, cost, 
-        mobile_no, del_no, staff_id, entgov, funct, timestamp, password 
+        mobile_no, del_no, staff_id, entgov, funct, timestamp, password, userid
         FROM users 
         WHERE username = '${username}' limit 1; `
     );

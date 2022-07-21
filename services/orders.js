@@ -69,7 +69,7 @@ async function create(order){
             , '${order.sc_name}', '${order.sd_manager}', '${order.pricing}', '${order.quartely}'
             , '${order.yearly}'
             )`;
-    console.log(sql);
+    //console.log(sql);
 
     const result = await db.query(
        sql
