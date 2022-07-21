@@ -13,32 +13,32 @@ async function getMultiple(){
 }
 
 async function create(order){
-    let sql = '';
+    //let sql = '';
 
-    for(var i= 0; i <= (order.length - 1); i++){
-        if(i=0){
+    // for(var i= 0; i <= (order.length - 1); i++){
+    //     if(i=0){
 
-        }
-        else{
-            sql += ',';
-        }
-        sql += `('${order[i].order_type}', '${order[i].service_id}', '${order[i].network_id}', '${order[i].product_type}'
-        , '${order[i].customer}', '${order[i].customer_id}', '${order[i].quantity}', '${order[i].others}'
-        , '${order[i].remark}', '${order[i].wiring}', '${order[i].app_date}', '${order[i].ae_name}'
-        , '${order[i].staff_id}', '${order[i].pm_name}', '${order[i].tid_manager}', '${order[i].ae_no}'
-        , '${order[i].cost_center}', '${order[i].form_status}', '${order[i].form_remark}', '${order[i].sector}'
-        , '${order[i].sfdc_id}', '${order[i].vertical}', '${order[i].hqstate}', '${order[i].contract_no}'
-        , '${order[i].scope}', '${order[i].submission_category}', '${order[i].po_date}', '${order[i].project_single}'
-        , '${order[i].sitename}', '${order[i].contact_no}', '${order[i].assign_by}'
-        , '${order[i].name}', '${order[i].type}', '${order[i].size}'
-        , '${order[i].name2}', '${order[i].type2}', '${order[i].size2}'
-        , '${order[i].name3}', '${order[i].type3}', '${order[i].size3}'
-        , '${order[i].name4}', '${order[i].type4}', '${order[i].size4}'
-        , '${order[i].sc_name}', '${order[i].sd_manager}', '${order[i].pricing}', '${order[i].quaterly}'
-        , '${order[i].yearly}'
-        )`
-    }
-    console.log(sql);
+    //     }
+    //     else{
+    //         sql += ',';
+    //     }
+    //     sql += `('${order.order_type}', '${order.service_id}', '${order.network_id}', '${order.product_type}'
+    //     , '${order.customer}', '${order.customer_id}', '${order.quantity}', '${order.others}'
+    //     , '${order.remark}', '${order.wiring}', '${order.app_date}', '${order.ae_name}'
+    //     , '${order.staff_id}', '${order.pm_name}', '${order.tid_manager}', '${order.ae_no}'
+    //     , '${order.cost_center}', '${order.form_status}', '${order.form_remark}', '${order.sector}'
+    //     , '${order.sfdc_id}', '${order.vertical}', '${order.hqstate}', '${order.contract_no}'
+    //     , '${order.scope}', '${order.submission_category}', '${order.po_date}', '${order.project_single}'
+    //     , '${order.sitename}', '${order.contact_no}', '${order.assign_by}'
+    //     , '${order.name}', '${order.type}', '${order.size}'
+    //     , '${order.name2}', '${order.type2}', '${order.size2}'
+    //     , '${order.name3}', '${order.type3}', '${order.size3}'
+    //     , '${order.name4}', '${order.type4}', '${order.size4}'
+    //     , '${order.sc_name}', '${order.sd_manager}', '${order.pricing}', '${order.quaterly}'
+    //     , '${order.yearly}'
+    //     )`
+    // }
+    //console.log(sql);
 
     const result = await db.query(
         `INSERT INTO orders('order_type', 'service_id', 'network_id', 'product_type' 
@@ -55,7 +55,21 @@ async function create(order){
             , 'name4', 'type4', 'size4'
             , 'sc_name', 'sd_manager', 'pricing', 'quaterly'
             , 'yearly'
-            ) VALUES ${sql}`
+            ) VALUES ('${order.order_type}', '${order.service_id}', '${order.network_id}', '${order.product_type}'
+            , '${order.customer}', '${order.customer_id}', '${order.quantity}', '${order.others}'
+            , '${order.remark}', '${order.wiring}', '${order.app_date}', '${order.ae_name}'
+            , '${order.staff_id}', '${order.pm_name}', '${order.tid_manager}', '${order.ae_no}'
+            , '${order.cost_center}', '${order.form_status}', '${order.form_remark}', '${order.sector}'
+            , '${order.sfdc_id}', '${order.vertical}', '${order.hqstate}', '${order.contract_no}'
+            , '${order.scope}', '${order.submission_category}', '${order.po_date}', '${order.project_single}'
+            , '${order.sitename}', '${order.contact_no}', '${order.assign_by}'
+            , '${order.name}', '${order.type}', '${order.size}'
+            , '${order.name2}', '${order.type2}', '${order.size2}'
+            , '${order.name3}', '${order.type3}', '${order.size3}'
+            , '${order.name4}', '${order.type4}', '${order.size4}'
+            , '${order.sc_name}', '${order.sd_manager}', '${order.pricing}', '${order.quaterly}'
+            , '${order.yearly}'
+            )`
     );
     console.log(result);
     let message = error.RECORD_ERROR;
