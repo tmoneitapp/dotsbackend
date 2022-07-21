@@ -1,5 +1,4 @@
 var express = require('express');
-// var cors = require('./cors');
 var router = express.Router();
 var users = require('../services/users');
 var authenticate = require('../services/authenticate');
@@ -45,16 +44,19 @@ router.post('/login', (req,res,next) =>{
 });
 
 router.get('/logout', (req,res,next) =>{
-  if(req.session){
-    req.session.destroy();
-    req.clearCookie('session-id');
-    req.redirect('/');
-  }
-  else {
-    var err = new Error('You are not logged in!');
-    err.status = 403;
-    next(err);
-  }
+  req.session.destroy();
+  req.clearCookie('session-id');
+  req.redirect('/');
+  // if(req.session){
+  //   req.session.destroy();
+  //   req.clearCookie('session-id');
+  //   req.redirect('/');
+  // }
+  // else {
+  //   var err = new Error('You are not logged in!');
+  //   err.status = 403;
+  //   next(err);
+  // }
 });
 
 module.exports = router;

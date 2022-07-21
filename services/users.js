@@ -1,7 +1,6 @@
 const db = require('./db');
 const helper = require('../helper');
 const config = require('../config');
-const { authenticate } = require('passport');
 const error = require('../shared/error');
 const crypto = require('crypto');
 
@@ -87,3 +86,11 @@ module.exports = {
     update,
     remove
 }
+
+/* TODO: Improve
+find
+findOne
+findById
+findByIdAndUpdate
+findByIdAndRemove
+*/
