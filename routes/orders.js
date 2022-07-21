@@ -16,12 +16,18 @@ orderRouter.route('/')
         res.statusCode = 200;
         res.setHeader('Content-Type','application/json');
         res.json(orders); 
-    }, (err) => {console.log(err); next(err);})
-    .catch((err) => {console.log(err); next(err);});
+    }, (err) => next(err))
+    .catch((err) => next(err));
 })
 .post((req, res, next) =>{
-    res.statusCode = 403;
-    res.end('POST operation not ready on /orders');
+    orders.create(req.body)
+    .then((order) =>{
+        console.log('Order Created', order);
+        res.statusCode =200;
+        res.setHeader('Content-Type','application/json');
+        res.json(order);
+    })
+    .catch((err) => next(err));
 })
 .put((req, res, next) =>{
     res.statusCode = 403;

@@ -12,9 +12,9 @@ async function getMultiple(){
     return rows;
 }
 
-async function createOne(order){
+async function create(order){
     const result = await db.query(
-        ``
+        `INSERT INTO orders set ?`, order
     );
     let message = error.RECORD_ERROR;
     if(!result && result.length != 0){
@@ -23,12 +23,7 @@ async function createOne(order){
     return {message};
 }
 
-async function createBulk(orders){
-    const result = await db.query(
-        ``
-    );
-    return '';
-}
+
 
 async function update(id, order){
     const result = await db.query(
@@ -55,8 +50,7 @@ async function remove(id){
 
 module.exports = {
     getMultiple,
-    createOne,
-    createBulk, 
+    create,
     update,
     remove
 }
