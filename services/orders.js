@@ -13,20 +13,16 @@ async function getMultiple(){
 }
 
 async function create(order){
-    let sql ='';
-    console.log(order);
-    console.log(order.length);
-    console.log(order[0].id);
-    console.log(order[1].id);
-    
-    for(var i= 0; i <= order.length -1; i++){
+    let sql = '';
+
+    for(var i= 0; i <= (order.length - 1); i++){
         if(i=0){
 
         }
         else{
             sql += ',';
         }
-        sql = `('${order[i].order_type}', '${order[i].service_id}', '${order[i].network_id}', '${order[i].product_type}'
+        sql += `('${order[i].order_type}', '${order[i].service_id}', '${order[i].network_id}', '${order[i].product_type}'
         , '${order[i].customer}', '${order[i].customer_id}', '${order[i].quantity}', '${order[i].others}'
         , '${order[i].remark}', '${order[i].wiring}', '${order[i].app_date}', '${order[i].ae_name}'
         , '${order[i].staff_id}', '${order[i].pm_name}', '${order[i].tid_manager}', '${order[i].ae_no}'
