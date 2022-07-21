@@ -18,7 +18,7 @@ exports.authenticateToken = (req, res, next) =>{
         return res.sendStatus(401);
     }
 
-    jwt.verify(token, process.env.ACCESS_TOKEN, (err, result) =>{
+    jwt.verify(token, config.secretKey, (err, result) =>{
         if(err){
             return res.sendStatus(403);
         }
