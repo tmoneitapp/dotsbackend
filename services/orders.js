@@ -40,20 +40,20 @@ async function create(order){
     // }
     //console.log(sql);
 
-    let sql =  `INSERT INTO ``orders``(``order_type``, ``service_id``, ``network_id``, ``product_type`` 
-            , ``customer``, ``customer_id``, ``quantity``, ``others``
-            , ``remark``, ``wiring``, ``app_date``, ``ae_name``
-            , ``staff_id``, ``pm_name``, ``tid_manager``, ``ae_no``
-            , ``cost_center``, ``form_status``, ``form_remark``, ``sector``
-            , ``sfdc_id``, ``vertical``, ``hqstate``, ``contract_no``
-            , ``scope``, ``submission_category``, ``po_date``, ``project_single``
-            , ``sitename``, ``contact_no``, ``assign_by``
-            , ``name``, ``type``, ``size``
-            , ``name2``, ``type2``, ``size2``
-            , ``name3``, ``type3``, ``size3``
-            , ``name4``, ``type4``, ``size4``
-            , ``sc_name``, ``sd_manager``, ``pricing``, ``quaterly``
-            , ``yearly``
+    let sql =  `INSERT INTO orders(order_type, service_id, network_id, product_type 
+            , customer, customer_id, quantity, others
+            , remark, wiring, app_date, ae_name
+            , staff_id, pm_name, tid_manager, ae_no
+            , cost_center, form_status, form_remark, sector
+            , sfdc_id, vertical, hqstate, contract_no
+            , scope, submission_category, po_date, project_single
+            , sitename, contact_no, assign_by
+            , name, type, size
+            , name2, type2, size2
+            , name3, type3, size3
+            , name4, type4, size4
+            , sc_name, sd_manager, pricing, quaterly
+            , yearly
             ) VALUES ('${order.order_type}', '${order.service_id}', '${order.network_id}', '${order.product_type}'
             , '${order.customer}', '${order.customer_id}', '${order.quantity}', '${order.others}'
             , '${order.remark}', '${order.wiring}', '${order.app_date}', '${order.ae_name}'
