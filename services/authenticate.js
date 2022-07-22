@@ -11,6 +11,10 @@ exports.getToken = function(user) {
         {expiresIn: 3600})
 };
 
+exports.getRefreshToken = function(user) {
+    return jwt.sign(user, config.refreshSecretKey, {expiresIn: 86400})
+};
+
 exports.authenticateToken = (req, res, next) =>{
     const authHeader = req.headers['authorization']
     const token = authHeader && authHeader.split(' ')[1]

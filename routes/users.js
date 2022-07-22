@@ -4,6 +4,7 @@ var users = require('../services/users');
 var authenticate = require('../services/authenticate');
 var bcrypt = require('bcryptjs');
 var error = require('../shared/error');
+var tokenList = {};
 
 /* GET users listing. */
 router.get('/', authenticate.authenticateToken, (req, res, next) =>{
@@ -49,29 +50,46 @@ router.get('/profile', authenticate.authenticateToken, (req, res, next) =>{
   }, (err) => next(err))
   .catch((err) => next(err));
   //console.log(res.locals);
-})
+});
+
+router.post('/token', (req, res, next) =>{
+  const postData = req.body
+  if((postData.refreshToken) && (postData.refreshToken in tokenList)){
+    const user = {
+      _id: postData._id
+    }
+    const token = authenticate.getToken({ _id: postData._id});
+    tokenList[postData.refreshToken].token = token;
+  }
+});
 
 router.post('/login', (req,res,next) =>{
   users.getLogin(req.body.username, req.body.password)
   .then((user) =>{
     console.log(user);
       if(user == error.USER_INVALID_PASSWORD){
-        res.statusCode =200;
-        res.setHeader('Content-Type','application/json');
-        res.json({success:false, status: error.USER_INVALID_PASSWORD});
+        res.statusCode = 400;
+        res.end();
+        // res.statusCode =200;
+        // res.setHeader('Content-Type','application/json');
+        // res.json({success:false, status: error.USER_INVALID_PASSWORD});
       }
       else if(user == error.USER_INVALID_USERNAME){
-        res.statusCode =200;
-        res.setHeader('Content-Type','application/json');
-        res.json({success:false, status: error.USER_INVALID_USERNAME});
+        res.statusCode = 400;
+        res.end();
+        // res.statusCode =200;
+        // res.setHeader('Content-Type','application/json');
+        // res.json({success:false, status: error.USER_INVALID_USERNAME});
       }
       else {
         // console.log(user.username);
         // console.log(user[0].username);
         var token = authenticate.getToken({ _id: user[0].userid});
+        var refreshToken = authenticate.getRefreshToken({ _id: user[0].userid});
+        //tokenList[refreshToken] = refreshToken;
         res.statusCode = 200;
         res.setHeader('Content-Type','application/json');
-        res.json({success:true, token: token, status: 'You are successfully logged in'});
+        res.json({success:true, token: token, refreshToken: refreshToken, status: 'You are successfully logged in'});
       }
     
   }, (err) => next(err))

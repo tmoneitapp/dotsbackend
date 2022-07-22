@@ -6,7 +6,8 @@ const config={
         database: "dots",
     },
     listPerPage: 10,
-    secretKey: '12345-67890-abcde-tmone'
+    secretKey: '12345-67890-abcde-tmone',
+    refreshSecretKey: 'tmone-12345-67890-abcde'
 };
 
 module.exports = config;

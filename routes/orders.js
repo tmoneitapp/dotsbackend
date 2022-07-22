@@ -61,4 +61,23 @@ orderRouter.route('/:orderId')
     res.end('DELETE operation not ready on /orders');
 });
 
+orderRouter.route('/:orderId/details')
+.get(authenticate.authenticateToken, (req, res, next) =>{
+    
+})
+.post(authenticate.authenticateToken, (req, res, next) =>{
+    res.statusCode = 403;
+    res.end('POST operation not ready on /orders');
+})
+.put(authenticate.authenticateToken, (req, res, next) =>{
+    res.statusCode = 403;
+    res.end('PUT operation not ready on /orders');
+})
+.delete(authenticate.authenticateToken, (req, res, next) =>{
+    res.statusCode = 403;
+    res.end('DELETE operation not ready on /orders');
+});
+
+
+
 module.exports = orderRouter;
