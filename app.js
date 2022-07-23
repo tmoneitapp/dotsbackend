@@ -4,11 +4,18 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var cors = require('cors');
+var passport = require('passport');
+var swaggerUi = require('swagger-ui-express'),
+  swaggerDocument = require('./swagger.json');
+
+//import { swaggerDocument } from './swagger';
+
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var ordersRouter = require('./routes/orders');
 var dashboardRouter = require('./routes/dashboard');
+
 
 var app = express();
 app.use(cors());
@@ -28,10 +35,12 @@ app.set('view engine', 'jade');
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
+app.use(passport.initialize());
+//app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.use('/users', usersRouter);
 app.use('/orders',ordersRouter);
 app.use('/dashboard', dashboardRouter);

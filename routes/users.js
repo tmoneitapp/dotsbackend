@@ -4,7 +4,7 @@ var users = require('../services/users');
 var authenticate = require('../services/authenticate');
 var bcrypt = require('bcryptjs');
 var error = require('../shared/error');
-var tokenList = {};
+var refreshTokens = {};
 
 /* GET users listing. */
 router.get('/', authenticate.authenticateToken, (req, res, next) =>{
@@ -52,14 +52,21 @@ router.get('/profile', authenticate.authenticateToken, (req, res, next) =>{
   //console.log(res.locals);
 });
 
-router.post('/token', (req, res, next) =>{
-  const postData = req.body
-  if((postData.refreshToken) && (postData.refreshToken in tokenList)){
+router.post('/refresh', (req, res, next) =>{
+  const refreshToken = req.body.refreshToken;
+
+  if(refreshToken in refreshTokens){
     const user = {
-      _id: postData._id
+      _id: refreshTokens[refreshToken]
     }
-    const token = authenticate.getToken({ _id: postData._id});
-    tokenList[postData.refreshToken].token = token;
+    const token = authenticate.getToken({ _id: user});
+    
+    res.statusCode = 200;
+    res.setHeader('Content-Type','application/json');
+    res.json({token: token});
+  }
+  else {
+    res.sendStatus(401);
   }
 });
 
@@ -86,30 +93,23 @@ router.post('/login', (req,res,next) =>{
         // console.log(user[0].username);
         var token = authenticate.getToken({ _id: user[0].userid});
         var refreshToken = authenticate.getRefreshToken({ _id: user[0].userid});
-        //tokenList[refreshToken] = refreshToken;
+        refreshTokens[refreshToken] = user[0].userid;
+
         res.statusCode = 200;
         res.setHeader('Content-Type','application/json');
-        res.json({success:true, token: token, refreshToken: refreshToken, status: 'You are successfully logged in'});
+        res.json({success:true, token: token, refreshToken: refreshToken});
       }
     
   }, (err) => next(err))
   .catch((err) => next(err));
 });
 
-router.get('/logout', (req,res,next) =>{
-  req.session.destroy();
-  req.clearCookie('session-id');
-  req.redirect('/');
-  // if(req.session){
-  //   req.session.destroy();
-  //   req.clearCookie('session-id');
-  //   req.redirect('/');
-  // }
-  // else {
-  //   var err = new Error('You are not logged in!');
-  //   err.status = 403;
-  //   next(err);
-  // }
+router.post('/logout', (req,res,next) =>{
+  const refreshToken = req.body.refreshToken;
+  if (refreshToken in refreshTokens){
+    delete refreshTokens[refreshToken];
+  }
+  res.sendStatus(204);
 });
 
 module.exports = router;
