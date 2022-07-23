@@ -21,9 +21,11 @@ router.get('/:userId', authenticate.authenticateToken, (req, res, next) =>{
   users.findByUserId(req.params.userId)
   .then((user) =>{
     if(user == error.RECORD_EMPTY){
-      res.statusCode =200;
-      res.setHeader('Content-Type','application/json');
-      res.json({success:false, status: error.RECORD_EMPTY});
+      res.statusCode = 400;
+      res.end();
+      // res.statusCode =200;
+      // res.setHeader('Content-Type','application/json');
+      // res.json({success:false, status: error.RECORD_EMPTY});
     }
     else{
       res.statusCode =200;
@@ -38,9 +40,11 @@ router.get('/profile', authenticate.authenticateToken, (req, res, next) =>{
   users.findByUserId(res.locals._id)
   .then((user) =>{
     if(user == error.RECORD_EMPTY){
-      res.statusCode =200;
-      res.setHeader('Content-Type','application/json');
-      res.json({success:false, status: error.RECORD_EMPTY});
+      res.statusCode = 400;
+      res.end();
+      // res.statusCode =200;
+      // res.setHeader('Content-Type','application/json');
+      // res.json({success:false, status: error.RECORD_EMPTY});
     }
     else{
       res.statusCode =200;
@@ -60,7 +64,7 @@ router.post('/refresh', (req, res, next) =>{
       _id: refreshTokens[refreshToken]
     }
     const token = authenticate.getToken({ _id: user});
-    
+
     res.statusCode = 200;
     res.setHeader('Content-Type','application/json');
     res.json({token: token});

@@ -22,14 +22,55 @@ async function findById(id){
 }
 
 async function create2(order){
-    var file1 
-    
-    if(!order.files){
+    var file1, file2, file3, file4  
+    var order = order.body;
 
+    if(order.files){
+        if(order.files.file1){
+            file1 = order.files.file1;
+            order.name = file1[0].originalname;
+            order.type = file1[0].mimetype;
+            order.size = file1[0].size;
+            order.content = file1[0].buffer;
+        } 
+            
+        if(order.files.file2){
+            file2 = order.files.file2;
+            order.name2 = file2[0].originalname;
+            order.type2 = file2[0].mimetype;
+            order.size2 = file2[0].size;
+            order.content2 = file2[0].buffer;
+        }
+            
+        if(order.files.file3){
+            file3 = order.files.file3;
+            order.name3 = file3[0].originalname;
+            order.type3 = file3[0].mimetype;
+            order.size3 = file3[0].size;
+            order.content3 = file3[0].buffer;
+        }
+            
+        if(order.files.file4){
+            file4 = order.files.file4;
+            order.name4 = file4[0].originalname;
+            order.type4 = file4[0].mimetype;
+            order.size4 = file4[0].size;
+            order.content4 = file4[0].buffer;
+        }
+            
     }
 
     let sql = "INSERT INTO orders SET ? "
-
+    
+    const result = await db.query(
+        sql, order
+     );
+     console.log(result);
+     let message = error.RECORD_ERROR;
+     if(result.affectedRows){
+         message = error.RECORD_CREATED;
+     }
+     return {message};
     // fs.open(temp_path, 'r', function (status, fd) {
     //     if (status) {
     //         console.log(status.message);
@@ -153,6 +194,7 @@ module.exports = {
     getMultiple,
     findById,
     create,
+    create2,
     update,
     remove
 }

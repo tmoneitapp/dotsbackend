@@ -135,7 +135,14 @@ orderRouter.route('/v2')
 }, {
     name: 'file2', maxCount: 1
 }]), (req, res, next) =>{
-
+    orders.create2(req)
+    .then((order) =>{
+        console.log('Order with attachment created', order);
+        res.statusCode =201;
+        res.setHeader('Content-Type','application/json');
+        res.json(order);
+    }, (err) => next(err))
+    .catch((err) => next(err));
 });
 
 orderRouter.route('/')
