@@ -63,7 +63,7 @@ async function create2(order){
     let sql = "INSERT INTO orders SET ? "
     
     const result = await db.query(
-        sql, order
+        sql, order.body
      );
      console.log(result);
      let message = error.RECORD_ERROR;
