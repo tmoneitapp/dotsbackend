@@ -177,13 +177,21 @@ orderRouter.route('/')
     .catch((err) => next(err));
 })
 .post(authenticate.authenticateToken,
-    upload.array('attachment')
+    upload.fields([{
+        name: 'file1', maxCount: 1
+    }, {
+        name: 'file2', maxCount: 1
+    }, {
+        name: 'file3', maxCount: 1
+    }, {
+        name: 'file4', maxCount: 1
+    }])
     , (req, res, next) =>{
 
-    orders.create(req.body)
+    orders.create(req)
     .then((order) =>{
         console.log('Order Created', order);
-        res.statusCode =200;
+        res.statusCode =201;
         res.setHeader('Content-Type','application/json');
         res.json(order);
     })
