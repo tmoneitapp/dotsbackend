@@ -27,10 +27,18 @@ async function create2(order){
     var order = order.body;
 
     console.log(files);
-    //console.log('full: ' + order);
+    if(files){
+        if(files['file1']){
+            order.name = files['file1'][0].originalname;
+            order.type = files['file1'][0].type;
+            order.size = files['file1'][0].size;
+            order.content = files['file1'][0].buffer;
+        }
+    }
 
     if(order.files){
         //console.log('file:' + order.files);
+        
         if(order.files.file1){
             file1 = order.files.file1;
             order.name = file1[0].originalname;

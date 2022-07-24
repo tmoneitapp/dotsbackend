@@ -25,8 +25,8 @@ const fileFilter = (req, file, cb) => {
 };
 
 const upload = multer({
-    storage: storage
-    //storage: multer.memoryStorage()
+    //storage: storage
+    storage: multer.memoryStorage()
     //fileFilter: fileFilter,
     // limits: {
     //     fileSize: 5 * 1024 * 1024, // no larger than 5mb
@@ -145,14 +145,14 @@ orderRouter.route('/v2')
 }, {
     name: 'file2', maxCount: 1
 }]), (req, res, next) =>{
-    if(req.files){
-        console.log(req.files);
+    // if(req.files){
+    //     console.log(req.files);
 
-        if(req.files.file1){
-            console.log(req.files.file1);
-            console.log(req.files.file1[0].originalname);
-        }
-    }
+    //     if(req.files.file1){
+    //         console.log(req.files.file1);
+    //         console.log(req.files.file1[0].originalname);
+    //     }
+    // }
     //console.log('post body: ' + req.body);
 
     orders.create2(req)
