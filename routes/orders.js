@@ -6,7 +6,15 @@ var authenticate = require('../services/authenticate');
 var error = require('../shared/error');
 var multer = require('multer');
 
+const storage = multer.diskStorage({
+    destination: (req, file, cb) =>{
+        cb(null, os.tempdir());
+    },
 
+    filename: (req, file, cb) =>{
+        cb(null, file.originalname);
+    }
+});
 
 const fileFilter = (req, file, cb) => {
     if(!file.originalname.match(/\.(jpg|jpeg|png|gif)$/)){
@@ -16,7 +24,8 @@ const fileFilter = (req, file, cb) => {
 };
 
 const upload = multer({
-    storage: multer.memoryStorage(),
+    storage: storage
+    //storage: multer.memoryStorage()
     //fileFilter: fileFilter,
     // limits: {
     //     fileSize: 5 * 1024 * 1024, // no larger than 5mb

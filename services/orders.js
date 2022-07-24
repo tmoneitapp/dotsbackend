@@ -63,34 +63,12 @@ async function create2(order){
             
     }
     console.log('body: ' + order.body);
-    let sql =  `INSERT INTO orders(order_type, service_id, network_id, product_type 
-        , customer, customer_id, quantity, others
-        , remark, wiring, app_date, ae_name
-        , staff_id, pm_name, tid_manager, ae_no
-        , cost_center, form_status, form_remark, sector
-        , sfdc_id, vertical, hqstate, contract_no
-        , scope, submission_category, po_date, project_single
-        , sitename, contact_no, assign_by
+    let sql =  `INSERT INTO orders(order_type, customer 
         , name, type, size, content
         , name2, type2, size2, content2
-        , name3, type3, size3
-        , name4, type4, size4
-        , sc_name, sd_manager, pricing, quartely
-        , yearly
-        ) VALUES ('${order.order_type}', '${order.service_id}', '${order.network_id}', '${order.product_type}'
-        , '${order.customer}', '${order.customer_id}', '${order.quantity}', '${order.others}'
-        , '${order.remark}', '${order.wiring}', '${order.app_date}', '${order.ae_name}'
-        , '${order.staff_id}', '${order.pm_name}', '${order.tid_manager}', '${order.ae_no}'
-        , '${order.cost_center}', '${order.form_status}', '${order.form_remark}', '${order.sector}'
-        , '${order.sfdc_id}', '${order.vertical}', '${order.hqstate}', '${order.contract_no}'
-        , '${order.scope}', '${order.submission_category}', '${order.po_date}', '${order.project_single}'
-        , '${order.sitename}', '${order.contact_no}', '${order.assign_by}'
+        ) VALUES ('${order.order_type}', '${order.customer}', 
         , '${order.name}', '${order.type}', '${order.size}', '${order.content}'
         , '${order.name2}', '${order.type2}', '${order.size2}', '${order.content2}'
-        , '${order.name3}', '${order.type3}', '${order.size3}'
-        , '${order.name4}', '${order.type4}', '${order.size4}'
-        , '${order.sc_name}', '${order.sd_manager}', '${order.pricing}', '${order.quartely}'
-        , '${order.yearly}'
         )`;
     
     const result = await db.query(
