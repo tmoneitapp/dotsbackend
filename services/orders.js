@@ -25,6 +25,8 @@ async function create2(order){
     var file1, file2, file3, file4  
     var order = order.body;
 
+    console.log(order);
+
     if(order.files){
         console.log(order.files);
         if(order.files.file1){
@@ -64,7 +66,7 @@ async function create2(order){
     let sql = "INSERT INTO orders SET ? "
     
     const result = await db.query(
-        sql, order.body
+        sql, [order.body]
      );
      console.log(result);
      let message = error.RECORD_ERROR;
