@@ -135,9 +135,14 @@ orderRouter.route('/v2')
 }, {
     name: 'file2', maxCount: 1
 }]), (req, res, next) =>{
-    // console.log('request: ' + req);
-    // console.log('req file: ' + req.files);
-    // console.log('req body: ' + req.body);
+    if(req.files){
+        console.log(req.files);
+
+        if(req.files.file1){
+            console.log(req.files.file1);
+            console.log(req.files.file1[0].originalname);
+        }
+    }
 
     orders.create2(req)
     .then((order) =>{
