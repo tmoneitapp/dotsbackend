@@ -62,7 +62,7 @@ async function create2(order){
         }
             
     }
-    console.log('body: ' + order.body);
+    console.log('body: ' + order);
     let sql =  `INSERT INTO orders(order_type, customer 
         , name, type, size, content
         , name2, type2, size2, content2

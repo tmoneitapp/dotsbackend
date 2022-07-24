@@ -153,6 +153,7 @@ orderRouter.route('/v2')
             console.log(req.files.file1[0].originalname);
         }
     }
+    console.log('post body: ' + req.body);
 
     orders.create2(req)
     .then((order) =>{
