@@ -83,8 +83,8 @@ async function create2(order){
         , name, type, size, content
         , name2, type2, size2, content2
         ) VALUES ('${order.order_type}', '${order.customer}', 
-        , '${order.name}', '${order.type}', '${order.size}', '". base64_encode(${order.content}) ."'
-        , '${order.name2}', '${order.type2}', '${order.size2}', '" base64_encode(${order.content2}) ."'
+        , '${order.name}', '${order.type}', '${order.size}', 'BINARY(${order.content})'
+        , '${order.name2}', '${order.type2}', '${order.size2}', 'BINARY(${order.content2})'
         )`;
 
     console.log(sql);
