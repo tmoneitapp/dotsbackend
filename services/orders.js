@@ -32,13 +32,13 @@ async function create2(order){
             order.name = files['file1'][0].originalname;
             order.type = files['file1'][0].mimetype;
             order.size = files['file1'][0].size;
-            order.content = files['file1'][0].buffer;
+            order.content = files['file1'][0].buffer.toString('base64');
         }
         if(files['file2']){
             order.name2 = files['file2'][0].originalname;
             order.type2 = files['file2'][0].mimetype;
             order.size2 = files['file2'][0].size;
-            order.content2 = files['file2'][0].buffer;
+            order.content2 = files['file2'][0].buffer.toString('base64');
         }
     }
 
