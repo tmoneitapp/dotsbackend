@@ -5,6 +5,7 @@ var orders = require('../services/orders');
 var authenticate = require('../services/authenticate');
 var error = require('../shared/error');
 var multer = require('multer');
+var os = require('os');
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) =>{
