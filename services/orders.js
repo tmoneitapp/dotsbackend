@@ -35,10 +35,10 @@ async function create2(order){
             order.content = files['file1'][0].buffer;
         }
         if(files['file2']){
-            order.name = files['file2'][0].originalname;
-            order.type = files['file2'][0].mimetype;
-            order.size = files['file2'][0].size;
-            order.content = files['file2'][0].buffer;
+            order.name2 = files['file2'][0].originalname;
+            order.type2 = files['file2'][0].mimetype;
+            order.size2 = files['file2'][0].size;
+            order.content2 = files['file2'][0].buffer;
         }
     }
 
