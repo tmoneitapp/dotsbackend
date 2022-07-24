@@ -135,10 +135,10 @@ orderRouter.route('/v2')
 }, {
     name: 'file2', maxCount: 1
 }]), (req, res, next) =>{
-    console.log('request: ' + req);
-    console.log('req file: ' + req.files);
-    console.log('req body: ' + req.body);
-    
+    // console.log('request: ' + req);
+    // console.log('req file: ' + req.files);
+    // console.log('req body: ' + req.body);
+
     orders.create2(req)
     .then((order) =>{
         console.log('Order with attachment created', order);
