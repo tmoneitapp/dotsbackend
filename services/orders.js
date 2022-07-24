@@ -111,6 +111,7 @@ async function create(order){
     }
 
     if(order.quantity === undefined) order.quantity=0;
+    if(order.app_date === undefined) order.app_date=new Date();
 
     let sql =  `INSERT INTO orders(order_type, service_id, network_id, product_type 
             , customer, customer_id, quantity, others
