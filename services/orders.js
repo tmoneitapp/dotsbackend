@@ -25,10 +25,10 @@ async function create2(order){
     var file1, file2, file3, file4  
     var order = order.body;
 
-    console.log('full: ' + order);
+    //console.log('full: ' + order);
 
     if(order.files){
-        console.log('file:' + order.files);
+        //console.log('file:' + order.files);
         if(order.files.file1){
             file1 = order.files.file1;
             order.name = file1[0].originalname;
@@ -62,7 +62,7 @@ async function create2(order){
         }
             
     }
-    console.log('body: ' + order.body);
+    console.log('body: ' + order.body.toString());
     let sql = "INSERT INTO orders SET ? "
     
     const result = await db.query(
