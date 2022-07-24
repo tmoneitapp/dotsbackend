@@ -110,6 +110,8 @@ async function create(order){
         }
     }
 
+    if(order.quantity === undefined) order.quantity=0;
+
     let sql =  `INSERT INTO orders(order_type, service_id, network_id, product_type 
             , customer, customer_id, quantity, others
             , remark, wiring, app_date, ae_name
