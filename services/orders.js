@@ -22,9 +22,11 @@ async function findById(id){
 }
 
 async function create2(order){
-    var file1, file2, file3, file4  
+    var file1, file2, file3, file4 
+    var files = order.files; 
     var order = order.body;
 
+    console.log(files);
     //console.log('full: ' + order);
 
     if(order.files){
