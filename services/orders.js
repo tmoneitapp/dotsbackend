@@ -86,6 +86,8 @@ async function create2(order){
         , '${order.name}', '${order.type}', '${order.size}', '${order.content}'
         , '${order.name2}', '${order.type2}', '${order.size2}', '${order.content2}'
         )`;
+        
+    console.log(sql);
     
     const result = await db.query(
         sql
