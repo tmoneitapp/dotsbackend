@@ -25,6 +25,12 @@ passport.serializeUser(function(user, done){
     done(null, user.username)
 });
 
+exports.getExpiresAt = function(token){
+    jwt.verify(token, config.secretKey, (err, result) =>{
+        return result.exp;
+    });
+};
+
 exports.getToken = function(user) {
     return jwt.sign(user, config.secretKey,
         {expiresIn: 3600}) //1 hour

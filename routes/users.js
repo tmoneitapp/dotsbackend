@@ -5,8 +5,8 @@ var authenticate = require('../services/authenticate');
 var bcrypt = require('bcryptjs');
 var error = require('../shared/error');
 var refreshTokens = {};
-var jwt = require('jsonwebtoken');
-var config = require('../config');
+// var jwt = require('jsonwebtoken');
+// var config = require('../config');
 
 /* GET users listing. */
 router.get('/', authenticate.authenticateToken, (req, res, next) =>{
@@ -66,13 +66,14 @@ router.post('/refresh', (req, res, next) =>{
       _id: refreshTokens[refreshToken]
     }
     const token = authenticate.getToken({ _id: user});
+    const expiresAt = authenticate.getExpiresAt(token);
 
     res.statusCode = 200;
     res.setHeader('Content-Type','application/json');
-    res.json({token: token});
+    res.json({token: token, expiresAt: expiresAt});
   }
   else {
-    res.sendStatus(401);
+    res.sendStatus(403); 
   }
 });
 
@@ -100,11 +101,11 @@ router.post('/login', (req,res,next) =>{
         var token = authenticate.getToken({ _id: user[0].userid});
         var refreshToken = authenticate.getRefreshToken({ _id: user[0].userid});
         refreshTokens[refreshToken] = user[0].userid;
-        var expiresAt;
+        var expiresAt = authenticate.getExpiresAt(token);
 
-        jwt.verify(token, config.secretKey, (err, result) =>{
-          expiresAt = result.exp;
-      });
+      //   jwt.verify(token, config.secretKey, (err, result) =>{
+      //     expiresAt = result.exp;
+      // });
 
         res.statusCode = 200;
         res.setHeader('Content-Type','application/json');
@@ -120,7 +121,7 @@ router.post('/logout', (req,res,next) =>{
   if (refreshToken in refreshTokens){
     delete refreshTokens[refreshToken];
   }
-  res.sendStatus(204);
+  res.sendStatus(204); //success with no content
 });
 
 module.exports = router;
