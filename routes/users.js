@@ -77,7 +77,7 @@ router.post('/refresh', (req, res, next) =>{
 router.post('/login', (req,res,next) =>{
   users.getLogin(req.body.username, req.body.password)
   .then((user) =>{
-    console.log(user);
+    //console.log(user);
       if(user == error.USER_INVALID_PASSWORD){
         res.statusCode = 400;
         res.end();
@@ -99,9 +99,11 @@ router.post('/login', (req,res,next) =>{
         var refreshToken = authenticate.getRefreshToken({ _id: user[0].userid});
         refreshTokens[refreshToken] = user[0].userid;
 
+        var jwtPayload = JSON.parse(window.atob(JWT.split('.')[1]));
+
         res.statusCode = 200;
         res.setHeader('Content-Type','application/json');
-        res.json({success:true, token: token, refreshToken: refreshToken});
+        res.json({success:true, token: token, refreshToken: refreshToken, ExpiresAt: jwtPayload.exp});
       }
     
   }, (err) => next(err))
