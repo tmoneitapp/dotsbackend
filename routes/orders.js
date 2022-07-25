@@ -169,7 +169,7 @@ orderRouter.route('/')
 .get(authenticate.authenticateToken, (req, res, next) =>{
     orders.getMultiple()
     .then((orders) =>{
-        console.log(orders);
+        //console.log(orders);
         res.statusCode = 200;
         res.setHeader('Content-Type','application/json');
         res.json(orders); 
@@ -210,6 +210,7 @@ orderRouter.route('/:orderId')
 .get(authenticate.authenticateToken, (req, res, next) =>{
     orders.findById(req.params.orderId)
     .then((order) =>{
+        console.log(order);
         res.statusCode = 200;
         res.setHeader('Content-Type','application/json');
         res.json(order);
