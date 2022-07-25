@@ -6,6 +6,7 @@ var bcrypt = require('bcryptjs');
 var error = require('../shared/error');
 var refreshTokens = {};
 var jwt = require('jsonwebtoken');
+var config = require('../config');
 
 /* GET users listing. */
 router.get('/', authenticate.authenticateToken, (req, res, next) =>{
