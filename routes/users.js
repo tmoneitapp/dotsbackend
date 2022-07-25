@@ -107,7 +107,7 @@ router.post('/login', (req,res,next) =>{
 
         res.statusCode = 200;
         res.setHeader('Content-Type','application/json');
-        res.json({success:true, token: token, refreshToken: refreshToken, expiresAt: jwtPayload.exp});
+        res.json({success:true, token: token, refreshToken: refreshToken, expiresAt: expiresAt});
       }
     
   }, (err) => next(err))
