@@ -5,6 +5,7 @@ var authenticate = require('../services/authenticate');
 var bcrypt = require('bcryptjs');
 var error = require('../shared/error');
 var refreshTokens = {};
+var jwt = require('jsonwebtoken');
 
 /* GET users listing. */
 router.get('/', authenticate.authenticateToken, (req, res, next) =>{
@@ -98,8 +99,11 @@ router.post('/login', (req,res,next) =>{
         var token = authenticate.getToken({ _id: user[0].userid});
         var refreshToken = authenticate.getRefreshToken({ _id: user[0].userid});
         refreshTokens[refreshToken] = user[0].userid;
+        var expiresAt;
 
-        var jwtPayload = JSON.parse(window.atob(JWT.split('.')[1]));
+        jwt.verify(token, config.secretKey, (err, result) =>{
+          expiresAt = result.exp;
+      });
 
         res.statusCode = 200;
         res.setHeader('Content-Type','application/json');
