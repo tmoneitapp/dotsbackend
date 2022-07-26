@@ -39,6 +39,7 @@ router.get('/:userId', authenticate.authenticateToken, (req, res, next) =>{
 });
 
 router.get('/profile', authenticate.authenticateToken, (req, res, next) =>{
+  console.log(res.locals._id);
   users.findByUserId(res.locals._id)
   .then((user) =>{
     if(user == error.RECORD_EMPTY){
@@ -102,7 +103,7 @@ router.post('/login', (req,res,next) =>{
         var refreshToken = authenticate.getRefreshToken({ _id: user[0].userid});
         refreshTokens[refreshToken] = user[0].userid;
         var expiresAt = authenticate.getExpiresAt(token);
-        
+
 console.log(expiresAt);
       //   jwt.verify(token, config.secretKey, (err, result) =>{
       //     expiresAt = result.exp;
