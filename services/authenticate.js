@@ -26,11 +26,12 @@ passport.serializeUser(function(user, done){
 });
 
 exports.getExpiresAt = function(token){
-    console.log(token);
+    console.log(`getExpiresAt: ${token}` );
     jwt.verify(token, config.secretKey, (err, result) =>{
         if(err){
             console.log(err);
         }
+        console.log(`getExpiresAt result: ${result.exp}`);
         return result.exp;
     });
 };
@@ -57,7 +58,7 @@ exports.authenticateToken = (req, res, next) =>{
         if(err){
             return res.sendStatus(403);
         }
-        console.log(result);
+        console.log(`authenticate result: ${result}`);
         console.log(result.exp);
         res.locals = result;
         next();

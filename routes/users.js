@@ -101,7 +101,7 @@ router.post('/login', async(req,res,next) =>{
         var token = authenticate.getToken({ _id: user[0].userid});
         var refreshToken = authenticate.getRefreshToken({ _id: user[0].userid});
         refreshTokens[refreshToken] = user[0].userid;
-        var expiresAt = authenticate.getExpiresAt(token);
+        const expiresAt = authenticate.getExpiresAt(token);
 
 console.log(expiresAt);
       //   jwt.verify(token, config.secretKey, (err, result) =>{
