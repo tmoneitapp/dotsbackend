@@ -57,6 +57,7 @@ exports.authenticateToken = (req, res, next) =>{
         if(err){
             return res.sendStatus(403);
         }
+        console.log(result);
         res.locals = result;
         next();
     });
