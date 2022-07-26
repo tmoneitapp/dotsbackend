@@ -39,7 +39,7 @@ router.get('/:userId', authenticate.authenticateToken, (req, res, next) =>{
 });
 
 router.get('/profile', authenticate.authenticateToken, (req, res, next) =>{
-  console.log(res.locals._id);
+  console.log(res.locals);
   users.findByUserId(res.locals._id)
   .then((user) =>{
     if(user == error.RECORD_EMPTY){
