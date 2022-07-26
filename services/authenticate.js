@@ -26,12 +26,13 @@ passport.serializeUser(function(user, done){
 });
 
 exports.getExpiresAt = function(token){
-    console.log(`getExpiresAt: ${token}` );
+    //console.log(`getExpiresAt: ${token}` );
     jwt.verify(token, config.secretKey, (err, result) =>{
         if(err){
-            console.log(err);
+            console.log(`getExpiresAt error: ${err}`);
+            
         }
-        console.log(`getExpiresAt result: ${result.exp}`);
+        //console.log(`getExpiresAt result: ${result.exp}`);
         return result.exp;
     });
 };
@@ -47,7 +48,7 @@ exports.getRefreshToken = function(user) {
 
 exports.verifyUser = passport.authenticate('jwt', {session: false});
 
-exports.authenticateToken = (req, res, next) =>{
+exports.authenticateToken = async (req, res, next) =>{
     const authHeader = req.headers['authorization']
     const token = authHeader && authHeader.split(' ')[1]
     if(token == null){
