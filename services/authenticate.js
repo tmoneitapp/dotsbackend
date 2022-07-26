@@ -27,6 +27,9 @@ passport.serializeUser(function(user, done){
 
 exports.getExpiresAt = function(token){
     jwt.verify(token, config.secretKey, (err, result) =>{
+        if(err){
+            console.log(err);
+        }
         return result.exp;
     });
 };
