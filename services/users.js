@@ -14,8 +14,7 @@ async function getMultiple(){
 }
 
 async function findByUserId(userid){
-    console.log('findByUserId: ');
-    console.log(userid);
+    console.log(`findByUserId: ${userid}`);
     
     const rows = await db.query(
         `SELECT id, name, username, email, userlevel, sektor, cost, 
