@@ -47,7 +47,7 @@ exports.getRefreshToken = function(user) {
 
 //exports.verifyUser = passport.authenticate('jwt', {session: false});
 
-exports.authenticateToken = async (req, res, next) =>{
+exports.authenticateToken = (req, res, next) =>{
     const authHeader = req.headers['authorization']
     const token = authHeader && authHeader.split(' ')[1]
     if(token == null){
@@ -61,7 +61,8 @@ exports.authenticateToken = async (req, res, next) =>{
         //console.log(`authenticate result: ${result}`);
         //console.log(result.exp);
         res.locals = result;
-        //console.log(res.locals);
+        console.log(res.locals);
+        console.log(res.locals._id);
         next();
     });
 };

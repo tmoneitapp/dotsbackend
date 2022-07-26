@@ -19,24 +19,24 @@ router.get('/', authenticate.authenticateToken, (req, res, next) =>{
   .catch((err) => next(err));
 });
 
-router.get('/:userId', authenticate.authenticateToken, (req, res, next) =>{
-  users.findByUserId(req.params.userId)
-  .then((user) =>{
-    if(user == error.RECORD_EMPTY){
-      res.statusCode = 400;
-      res.end();
-      // res.statusCode =200;
-      // res.setHeader('Content-Type','application/json');
-      // res.json({success:false, status: error.RECORD_EMPTY});
-    }
-    else{
-      res.statusCode =200;
-      res.setHeader('Content-Type','application/json');
-      res.json(user);
-    }
-  }, (err) => next(err))
-  .catch((err) => next(err));
-});
+// router.get('/:userId', authenticate.authenticateToken, (req, res, next) =>{
+//   users.findByUserId(req.params.userId)
+//   .then((user) =>{
+//     if(user == error.RECORD_EMPTY){
+//       res.statusCode = 400;
+//       res.end();
+//       // res.statusCode =200;
+//       // res.setHeader('Content-Type','application/json');
+//       // res.json({success:false, status: error.RECORD_EMPTY});
+//     }
+//     else{
+//       res.statusCode =200;
+//       res.setHeader('Content-Type','application/json');
+//       res.json(user);
+//     }
+//   }, (err) => next(err))
+//   .catch((err) => next(err));
+// });
 
 router.get('/profile2', authenticate.authenticateToken, (req, res, next) =>{
   console.log(res.locals);
@@ -55,7 +55,7 @@ router.get('/profile2', authenticate.authenticateToken, (req, res, next) =>{
   .catch((err) => next(err));
 });
 
-router.get('/profile', authenticate.authenticateToken, async(req, res, next) =>{
+router.get('/profile', authenticate.authenticateToken, (req, res, next) =>{
   users.findByUserId(res.locals._id)
   .then((user) =>{
     if(user == error.RECORD_EMPTY){
@@ -94,7 +94,7 @@ router.post('/refresh', (req, res, next) =>{
   }
 });
 
-router.post('/login', async(req,res,next) =>{
+router.post('/login', (req,res,next) =>{
   users.getLogin(req.body.username, req.body.password)
   .then((user) =>{
     //console.log(user);
