@@ -30,9 +30,8 @@ exports.getExpiresAt = function(token){
         if(err){
             console.log(err);
         }
-        console.log(result);
-        console.log(result.exp);
-        return result.exp
+        res.locals = result;
+        return result.exp;
     });
 };
 
