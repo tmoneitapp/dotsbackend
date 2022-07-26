@@ -38,8 +38,7 @@ router.get('/:userId', authenticate.authenticateToken, (req, res, next) =>{
   .catch((err) => next(err));
 });
 
-router.get('/profile', authenticate.authenticateToken, (req, res, next) =>{
-  console.log(res.locals._id);
+router.get('/profile', authenticate.authenticateToken, async(req, res, next) =>{
   users.findByUserId(res.locals._id)
   .then((user) =>{
     if(user == error.RECORD_EMPTY){
@@ -78,7 +77,7 @@ router.post('/refresh', (req, res, next) =>{
   }
 });
 
-router.post('/login', (req,res,next) =>{
+router.post('/login', async(req,res,next) =>{
   users.getLogin(req.body.username, req.body.password)
   .then((user) =>{
     //console.log(user);
