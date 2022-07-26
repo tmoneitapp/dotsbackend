@@ -59,10 +59,10 @@ exports.authenticateToken = async (req, res, next) =>{
         if(err){
             return res.sendStatus(403);
         }
-        console.log(`authenticate result: ${result}`);
-        console.log(result.exp);
+        //console.log(`authenticate result: ${result}`);
+        //console.log(result.exp);
         res.locals = result;
-        console.log(res.locals);
+        //console.log(res.locals);
         next();
     });
 };
