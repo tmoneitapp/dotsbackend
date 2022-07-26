@@ -61,6 +61,7 @@ exports.authenticateToken = (req, res, next) =>{
         console.log(`authenticate result: ${result}`);
         console.log(result.exp);
         res.locals = result;
+        console.log(res.locals);
         next();
     });
 };
