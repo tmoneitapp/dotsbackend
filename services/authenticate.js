@@ -25,15 +25,16 @@ var config = require('../config');
 //     done(null, user.username)
 // });
 
-exports.getExpiresAt = function(token){
-    //console.log(`getExpiresAt: ${token}` );
+exports.getExpiresAt = function(token) {
+    var expiresAt;
     jwt.verify(token, config.secretKey, (err, result) =>{
         if(err){
             console.log(`getExpiresAt error: ${err}`);    
         }
-        //console.log(`getExpiresAt result: ${result.exp}`);
-        return result.exp;
+        console.log(`getExpiresAt result: ${result.exp}`);
+        expiresAt = result.exp;
     });
+    return expiresAt;
 };
 
 exports.getToken = function(user) {
@@ -61,8 +62,8 @@ exports.authenticateToken = (req, res, next) =>{
         //console.log(`authenticate result: ${result}`);
         //console.log(result.exp);
         res.locals = result;
-        console.log(res.locals);
-        console.log(res.locals._id);
+        // console.log(res.locals);
+        // console.log(res.locals._id);
         next();
     });
 };

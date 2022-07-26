@@ -5,8 +5,8 @@ var authenticate = require('../services/authenticate');
 var bcrypt = require('bcryptjs');
 var error = require('../shared/error');
 var refreshTokens = {};
-// var jwt = require('jsonwebtoken');
-// var config = require('../config');
+var jwt = require('jsonwebtoken');
+var config = require('../config');
 
 /* GET users listing. */
 router.get('/', authenticate.authenticateToken, (req, res, next) =>{
@@ -118,10 +118,10 @@ router.post('/login', (req,res,next) =>{
         var accessToken = authenticate.getToken({ _id: user[0].userid});
         var refreshToken = authenticate.getRefreshToken({ _id: user[0].userid});
         refreshTokens[refreshToken] = user[0].userid;
-        const expiresAt = authenticate.getExpiresAt(accessToken);
+        var expiresAt = authenticate.getExpiresAt(accessToken);
 
 console.log(expiresAt); // this one undefined 
-      //   jwt.verify(token, config.secretKey, (err, result) =>{
+      //   jwt.verify(accessToken, config.secretKey, (err, result) =>{
       //     expiresAt = result.exp;
       // });
 
