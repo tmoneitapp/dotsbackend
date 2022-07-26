@@ -54,7 +54,7 @@ exports.authenticateToken = (req, res, next) =>{
 
     jwt.verify(token, config.secretKey, (err, result) =>{
         if(err){
-            return res.sendStatus(401);
+            return res.sendStatus(403);
         }
         res.locals = result;
         next();
