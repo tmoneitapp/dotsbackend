@@ -115,19 +115,19 @@ router.post('/login', async(req,res,next) =>{
       else {
         // console.log(user.username);
         // console.log(user[0].username);
-        var token = authenticate.getToken({ _id: user[0].userid});
+        var accessToken = authenticate.getToken({ _id: user[0].userid});
         var refreshToken = authenticate.getRefreshToken({ _id: user[0].userid});
         refreshTokens[refreshToken] = user[0].userid;
-        const expiresAt = authenticate.getExpiresAt(token);
+        const expiresAt = authenticate.getExpiresAt(accessToken);
 
-console.log(expiresAt);
+console.log(expiresAt); // this one undefined 
       //   jwt.verify(token, config.secretKey, (err, result) =>{
       //     expiresAt = result.exp;
       // });
 
         res.statusCode = 200;
         res.setHeader('Content-Type','application/json');
-        res.json({success:true, token: token, refreshToken: refreshToken, expiresAt: expiresAt});
+        res.json({success:true, token: accessToken, refreshToken: refreshToken, expiresAt: expiresAt});
       }
     
   }, (err) => next(err))
