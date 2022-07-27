@@ -102,7 +102,7 @@
                     "200": {
                         "description": "successful operation",
                         "schema": {
-
+                            "$ref": "#/definitions/LoginResponse"
                         }
                     },
                     "400": {
@@ -110,47 +110,110 @@
                     }
                 }
             }
+        },
+        "/users/logout":{
+            "post":{
+                "tags": ["Users"],
+                "summary": "Logs user out from system",
+                "parameters": [
+                    {
+                        "name": "refreshToken",
+                        "in": "body",
+                        "description": "Valid refresh token",
+                        "required": true,
+                        "type": "object",
+                        "properties": {
+                            "refreshToken": {
+                                "type": "string",
+                                "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI3YmNkMDk3ZWI0ZTRkYmYxMDQ0NzU0Yzk4YjBjYTY0YyIsImlhdCI6MTY1ODg2MDA3NiwiZXhwIjoxNjU5NDY0ODc2fQ.S69kF00FCM9aTGXi29-kRirLMGaeLWR15t7FI_GxtU4"
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No response return"
+                    },
+                    "403": {
+                        "description": "Invalid refresh token/refresh token expired"
+                    }
+                }
+            }
         }
     },
     "definitions": {
         "User": {
-            "required": ["name", "_id", "companies"],
+            "required": ["name", "username","staff_id","email","userlevel" ],
             "properties": {
-                "_id": {
+                "id": {
                     "type": "integer",
                     "uniqueItems": true
-                },
-                "isPublic": {
-                    "type": "boolean"
                 },
                 "name": {
                     "type": "string"
                 },
-                "books": {
-                    "type": "array",
-                    "items": {
-                        "type": "object",
-                        "properties": {
-                            "name": {
-                                "type": "string"
-                            },
-                            "amount": {
-                                "type": "number"
-                            }
-                        }
-                    }
+                "username": {
+                    "type": "string"
                 },
-                "companies": {
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    }
+                "email": {
+                    "type": "string"
+                },
+                "userlevel": {
+                    "type": "integer"
+                },
+                "sektor": {
+                    "type": "string"
+                },
+                "cost": {
+                    "type": "string"
+                },
+                "mobile_no": {
+                    "type": "string"
+                },
+                "del_no": {
+                    "type": "string"
+                },
+                "staff_id": {
+                    "type": "string"
+                },
+                "entgov": {
+                    "type": "string"
+                },
+                "funct": {
+                    "type": "string"
+                },
+                "timestamp": {
+                    "type": "integer"
+                },
+                "userid": {
+                    "type": "string"
                 }
             }
         },
         "Users": {
             "type": "array",
             "$ref": "#/definitions/User"
+        },
+        "LoginResponse": {
+            "type": "object",
+            "properties": {
+                "status": {
+                    "type": "boolean",
+                    "example": true
+                },
+                "token": {
+                    "type": "string",
+                    "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI3YmNkMDk3ZWI0ZTRkYmYxMDQ0NzU0Yzk4YjBjYTY0YyIsImlhdCI6MTY1ODg2MDA3NiwiZXhwIjoxNjU4ODYzNjc2fQ.Lf5ZBAfyFQNeyuLyEJ3bC9_8Z4f12qoKOiR0V02DrK0"
+                },
+                "refreshToken": {
+                    "type": "string",
+                    "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI3YmNkMDk3ZWI0ZTRkYmYxMDQ0NzU0Yzk4YjBjYTY0YyIsImlhdCI6MTY1ODg2MDA3NiwiZXhwIjoxNjU5NDY0ODc2fQ.S69kF00FCM9aTGXi29-kRirLMGaeLWR15t7FI_GxtU4"
+                },
+                "expiresAt": {
+                    "type": "number",
+                    "example": 1658863676
+                }
+            }
         }
     }
       

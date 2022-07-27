@@ -12,6 +12,22 @@ async function getMultiple(){
     return rows;
 }
 
+async function getDashboard_OrderType(){
+    const rows = await db.query(
+        `SELECT id, order_type
+        FROM orders`
+    );
+    return rows;
+}
+
+async function getDashboard_ProductType(){
+    const rows = await db.query(
+        `SELECT id, product_type
+        FROM orders`
+    );
+    return rows;
+}
+
 async function findById(id){
     const rows = await db.query(
         `SELECT * 
@@ -187,6 +203,8 @@ async function remove(id){
 
 module.exports = {
     getMultiple,
+    getDashboard_OrderType,
+    getDashboard_ProductType,
     findById,
     create,
     create2,
