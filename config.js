@@ -1,11 +1,13 @@
 const config={
     db: {
+        // openshift configuration
         host: "172.16.112.118",
         user: "root",
         password: "rootpassword",
         database: "dots",
     },
     db2: {
+        // pc server configuration remotely
         host: "10.32.51.153",
         user: "dotsuser",
         password: "Passw0rd123!@#",

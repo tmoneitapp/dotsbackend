@@ -4,9 +4,10 @@ const config = require('../config');
 const error = require('../shared/error');
 
 async function getMultiple(){
+    //const offset = helper.getOffset(page, config.listPerPage);
     const rows = await db.query(
         `SELECT * 
-        FROM orders 
+        FROM orders LIMIT 100
         `
     );
     return rows;
@@ -126,13 +127,51 @@ async function create(order){
         }
     }
 
+    if(order.order_type === undefined) order.order_type='';
+    if(order.service_id === undefined) order.service_id='';
+    if(order.network_id === undefined) order.network_id='';
+    if(order.product_type === undefined) order.product_type='';
+    if(order.customer === undefined) order.customer='';
+    if(order.customer_id === undefined) order.customer_id='';
     if(order.quantity === undefined) order.quantity=0;
+    if(order.others === undefined) order.others='';
+    if(order.remark === undefined) order.remark='';
+    if(order.wiring === undefined) order.wiring='';
     if(order.app_date === undefined) order.app_date=new Date().toISOString().replace(/T.+/,'');
+    if(order.ae_name === undefined) order.ae_name='';
+    if(order.cost_center === undefined) order.cost_center='';
+    if(order.pm_name === undefined) order.pm_name='';
+    if(order.tid_manager === undefined) order.tid_manager='';
+    if(order.ae_no === undefined) order.ae_no='';
+    if(order.cost_center === undefined) order.cost_center='';
+    if(order.form_status === undefined) order.form_status='';
+    if(order.form_remark === undefined) order.form_remark='';
+    if(order.sector === undefined) order.sector='';
+    if(order.sfdc_id === undefined) order.sfdc_id='';
+    if(order.vertical === undefined) order.vertical='';
+    if(order.hqstate === undefined) order.hqstate='';
+    if(order.contract_no === undefined) order.contract_no='';
+    if(order.scope === undefined) order.scope='';
+    if(order.submission_category === undefined) order.submission_category='';
     if(order.po_date === undefined) order.po_date = new Date().toISOString().replace(/T.+/,'');
+    if(order.project_single === undefined) order.project_single='';
+    if(order.sitename === undefined) order.sitename='';
+    if(order.contact_no === undefined) order.contact_no='';
+    if(order.assign_by === undefined) order.assign_by='';
+    if(order.name === undefined) order.name='';
+    if(order.type === undefined) order.type='';
     if(order.size === undefined) order.size=0;
+    if(order.name2 === undefined) order.name2='';
+    if(order.type2 === undefined) order.type2='';
     if(order.size2 === undefined) order.size2=0;
+    if(order.name3 === undefined) order.name3='';
+    if(order.type3 === undefined) order.type3='';
     if(order.size3 === undefined) order.size3=0;
+    if(order.name4 === undefined) order.name4='';
+    if(order.type4 === undefined) order.type4='';
     if(order.size4 === undefined) order.size4=0;
+    if(order.sc_name === undefined) order.sc_name='';
+    if(order.sd_manager === undefined) order.sd_manager='';
 
     let sql =  `INSERT INTO orders(order_type, service_id, network_id, product_type 
             , customer, customer_id, quantity, others
@@ -165,15 +204,34 @@ async function create(order){
             )`;
     //console.log(sql);
 
-    const result = await db.query(
-       sql
-    );
-    console.log(result);
+    // create order table first
+    // const result = await db.query(
+    //    sql
+    // )
     let message = error.RECORD_ERROR;
-    if(result.affectedRows){
-        message = error.RECORD_CREATED;
-    }
-    return {message};
+
+    await db.query(sql)
+    .then((result) =>{
+
+        if(result.affectedRows){
+            console.log(result);
+            if(files){
+                let sql2 = ``;
+            }
+        }
+        else {
+            return {message}
+        }
+
+    })
+    .catch((err)=> next(err));
+    
+    //console.log(result);
+    
+    // if(result.affectedRows){
+    //     message = error.RECORD_CREATED;
+    // }
+    // return {message};
 }
 
 

@@ -55,7 +55,8 @@ router.get('/profile2', authenticate.authenticateToken, (req, res, next) =>{
   .catch((err) => next(err));
 });
 
-router.get('/profile', authenticate.authenticateToken, (req, res, next) =>{
+router.route('/profile')
+.get(authenticate.authenticateToken, (req, res, next) =>{
   users.findByUserId(res.locals._id)
   .then((user) =>{
     if(user == error.RECORD_EMPTY){
@@ -73,6 +74,15 @@ router.get('/profile', authenticate.authenticateToken, (req, res, next) =>{
   }, (err) => next(err))
   .catch((err) => next(err));
   //console.log(res.locals);
+})
+.put(authenticate.authenticateToken, (req, res, next) =>{
+  users.findByIdAndUpdate(res.locals._id, req.body)
+  .then((result) =>{  
+    res.statusCode =200;
+      res.setHeader('Content-Type','application/json');
+      res.json(result);
+  }, (err) => next(err))
+  .catch((err) => next(err));
 });
 
 router.post('/refresh', (req, res, next) =>{

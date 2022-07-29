@@ -23,7 +23,7 @@ async function findByUserId(userid){
         WHERE userid = '${userid}' limit 1; `
     );
     if(rows.length != 0){
-        return rows;
+        return rows[0];
     }
     else{
         return error.RECORD_EMPTY;
@@ -71,11 +71,66 @@ async function create(user){
     }
 }
 
-async function update(id, user){
+async function findByIdAndUpdate(id, user){
+    let sql = 'UPDATE users SET ';
+    let sqlvalue = '';
+
+    if(user.cost){
+        if (sqlvalue !='') sqlvalue+=','
+        sqlvalue += `cost = '${user.cost}'`
+    }
+
+    if(user.del_no){
+        if(sqlvalue !='') sqlvalue+=','
+        sqlvalue += `del_no ='${user.del_no}'`
+    }
+
+    if(user.email){
+        if(sqlvalue !='') sqlvalue+=','
+        sqlvalue += `email='${user.email}'`
+    }
+
+    if(user.entgov){
+        if(sqlvalue !='') sqlvalue+=','
+        sqlvalue += `entgov='${user.entgov}'`
+    }
+
+    if(user.funct){
+        if(sqlvalue !='') sqlvalue+=','
+        sqlvalue += `funct='${user.funct}'`
+    }
+
+    if(user.mobile_no){
+        if(sqlvalue !='') sqlvalue+=','
+        sqlvalue += `mobile_no='${user.mobile_no}'`
+    }
+    
+    if(user.name){
+        if(sqlvalue!='') sqlvalue+=','
+        sqlvalue += `name='${user.name}'`
+    }
+
+    if(user.sektor){
+        if(sqlvalue!='') sqlvalue+=','
+        sqlvalue += `sektor='${user.sektor}'`
+    }
+
+    if(user.staff_id){
+        if(sqlvalue!='') sqlvalue+=','
+        sqlvalue += `staff_id='${user.staff_id}'`
+    }
+
+    if(user.username){
+        if(sqlvalue!='') sqlvalue+=','
+        sqlvalue += `username='${user.username}'`
+    }
+
+    sql += sqlvalue + ` WHERE userid = '${id}'`
+
+    console.log(sql);
+
     const result = await db.query(
-        `UPDATE user
-        SET 
-        WHERE id=${id}`
+        sql
     );
     let message = 'Error in updating user';
     if (result.affectedRows){
@@ -101,7 +156,7 @@ module.exports = {
     getLogin,
     findByUserId,
     create,
-    update,
+    findByIdAndUpdate,
     remove
 }
 
