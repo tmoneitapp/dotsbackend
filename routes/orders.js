@@ -217,13 +217,29 @@ orderRouter.route('/:orderId')
     }, (err) => next(err))
     .catch((err) => next(err));
 })
-.post((req, res, next) =>{
-    res.statusCode = 403;
-    res.end('POST operation not ready on /orders');
-})
-.put((req, res, next) =>{
-    res.statusCode = 403;
-    res.end('PUT operation not supported on /orders');
+.put(authenticate.authenticateToken, 
+    upload.fields([{
+        name: 'file1', maxCount: 1
+    }, {
+        name: 'file2', maxCount: 1
+    }, {
+        name: 'file3', maxCount: 1
+    }, {
+        name: 'file4', maxCount: 1
+    }]), (req, res, next) =>{
+    orders.findByIdAndUpdate(req.params.orderId, req)
+    .then((order) =>{
+        if(order == error.RECORD_ERROR){
+            res.statusCode=400;
+            res.end();
+        }
+        else{
+            res.statusCode =200;
+            res.setHeader('Content-Type','application/json');
+            res.json(order);
+        }
+    }, (err) => next(err))
+    .catch((err) => next(err));
 })
 .delete((req, res, next) =>{
     res.statusCode = 403;

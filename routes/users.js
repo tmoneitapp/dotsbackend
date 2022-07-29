@@ -19,25 +19,6 @@ router.get('/', authenticate.authenticateToken, (req, res, next) =>{
   .catch((err) => next(err));
 });
 
-
-
-router.get('/profile2', authenticate.authenticateToken, (req, res, next) =>{
-  console.log(res.locals);
-  users.findByUserId(res.locals._id)
-  .then((user)=>{
-    if(user == error.RECORD_EMPTY){
-      res.statusCode = 400;
-      res.end();
-    }
-    else{
-      res.statusCode = 200;
-      res.setHeader('Content-Type','application/json');
-      res.json(user);
-    }
-  }, (err) => next(err))
-  .catch((err) => next(err));
-});
-
 router.route('/profile')
 .get(authenticate.authenticateToken, (req, res, next) =>{
   users.findByUserId(res.locals._id)

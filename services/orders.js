@@ -16,7 +16,7 @@ async function getMultiple(){
 async function getDashboard_OrderType(){
     const rows = await db.query(
         `SELECT id, order_type
-        FROM orders`
+        FROM orders LIMIT 2000`
     );
     return rows;
 }
@@ -24,7 +24,7 @@ async function getDashboard_OrderType(){
 async function getDashboard_ProductType(){
     const rows = await db.query(
         `SELECT id, product_type
-        FROM orders`
+        FROM orders LIMIT 2000`
     );
     return rows;
 }
@@ -35,7 +35,7 @@ async function findById(id){
         FROM orders 
         WHERE id = ${id}`
     );
-    return rows;
+    return rows[0];
 }
 
 async function create2(order){
@@ -133,13 +133,13 @@ async function create(order){
     if(order.product_type === undefined) order.product_type='';
     if(order.customer === undefined) order.customer='';
     if(order.customer_id === undefined) order.customer_id='';
-    if(order.quantity === undefined) order.quantity=0;
+    if(order.quantity === undefined) order.quantity='';
     if(order.others === undefined) order.others='';
     if(order.remark === undefined) order.remark='';
     if(order.wiring === undefined) order.wiring='';
     if(order.app_date === undefined) order.app_date=new Date().toISOString().replace(/T.+/,'');
     if(order.ae_name === undefined) order.ae_name='';
-    if(order.cost_center === undefined) order.cost_center='';
+    if(order.staff_id === undefined) order.staff_id='';
     if(order.pm_name === undefined) order.pm_name='';
     if(order.tid_manager === undefined) order.tid_manager='';
     if(order.ae_no === undefined) order.ae_no='';
@@ -236,12 +236,229 @@ async function create(order){
 
 
 
-async function update(id, order){
+async function findByIdAndUpdate(id, order){
+    var files = order.files;
+    var order = order.body;
+
+    let sql = 'UPDATE orders SET ';
+    let sqlvalue = '';
+
+    if(files){
+        if(files['file1']){
+            order.name = files['file1'][0].originalname;
+            order.type = files['file1'][0].mimetype;
+            order.size = files['file1'][0].size;
+            order.content = files['file1'][0].buffer.toString('base64');
+        }
+        if(files['file2']){
+            order.name2 = files['file2'][0].originalname;
+            order.type2 = files['file2'][0].mimetype;
+            order.size2 = files['file2'][0].size;
+            order.content2 = files['file2'][0].buffer.toString('base64');
+        }
+        if(files['file3']){
+            order.name3 = files['file3'][0].originalname;
+            order.type3 = files['file3'][0].mimetype;
+            order.size3 = files['file3'][0].size;
+            order.content3 = files['file3'][0].buffer.toString('base64');
+        }
+        if(files['file4']){
+            order.name4 = files['file4'][0].originalname;
+            order.type4 = files['file4'][0].mimetype;
+            order.size4 = files['file4'][0].size;
+            order.content4 = files['file4'][0].buffer.toString('base64');
+        }
+    }
+
+    if(order.order_type){
+        if(sqlvalue!='') sqlvalue+=','
+        sqlvalue += `order_type ='${order.order_type}'`
+    }
+    if(order.service_id){
+        if(sqlvalue!='') sqlvalue+=','
+        sqlvalue += `service_id ='${order.service_id}'`
+    }
+    if(order.network_id){
+        if(sqlvalue!='') sqlvalue+=','
+        sqlvalue += `network_id ='${order.network_id}'`
+    }
+    if(order.product_type){
+        if(sqlvalue!='') sqlvalue+=','
+        sqlvalue += `product_type ='${order.product_type}'`
+    }
+    if(order.customer){
+        if(sqlvalue!='') sqlvalue+=','
+        sqlvalue += `customer ='${order.customer}'`
+    }
+    if(order.customer_id){
+        if(sqlvalue!='') sqlvalue+=','
+        sqlvalue += `customer_id ='${order.customer_id}'`
+    }
+    if(order.quantity){
+        if(sqlvalue!='') sqlvalue+=','
+        sqlvalue += `quantity ='${order.quantity}'`
+    }
+    if(order.others){
+        if(sqlvalue!='') sqlvalue+=','
+        sqlvalue += `others ='${order.others}'`
+    }
+    if(order.remark){
+        if(sqlvalue!='') sqlvalue+=','
+        sqlvalue += `remark ='${order.remark}'`
+    }
+    if(order.wiring){
+        if(sqlvalue!='') sqlvalue+=','
+        sqlvalue += `wiring ='${order.wiring}'`
+    }
+    if(order.app_date){
+        if(sqlvalue!='') sqlvalue+=','
+        sqlvalue += `app_date ='${order.app_date}'`
+    }
+    /*
+        Some of field not able to change
+        order.ae_name 
+        order.ae_no 
+        order.staff_id
+        order.cost_center
+    */
+    if(order.pm_name){
+        if(sqlvalue!='') sqlvalue+=','
+        sqlvalue += `pm_name ='${order.pm_name}'`
+    }
+    if(order.tid_manager){
+        if(sqlvalue!='') sqlvalue+=','
+        sqlvalue += `tid_manager ='${order.tid_manager}'`
+    }
+    if(order.form_status){
+        if(sqlvalue!='') sqlvalue+=','
+        sqlvalue += `form_status ='${order.form_status}'`
+    }
+    if(order.form_remark){
+        if(sqlvalue!='') sqlvalue+=','
+        sqlvalue += `form_remark ='${order.form_remark}'`
+    }
+    if(order.sector){
+        if(sqlvalue!='') sqlvalue+=','
+        sqlvalue += `sector ='${order.sector}'`
+    }
+    if(order.sfdc_id){
+        if(sqlvalue!='') sqlvalue+=','
+        sqlvalue += `sfdc_id ='${order.sfdc_id}'`
+    }
+    if(order.vertical){
+        if(sqlvalue!='') sqlvalue+=','
+        sqlvalue += `vertical ='${order.vertical}'`
+    }
+    if(order.hqstate){
+        if(sqlvalue!='') sqlvalue+=','
+        sqlvalue += `hqstate ='${order.hqstate}'`
+    }
+    if(order.contract_no){
+        if(sqlvalue!='') sqlvalue+=','
+        sqlvalue += `contract_no ='${order.contract_no}'`
+    }
+    if(order.scope){
+        if(sqlvalue!='') sqlvalue+=','
+        sqlvalue += `scope ='${order.scope}'`
+    }
+    if(order.submission_category){
+        if(sqlvalue!='') sqlvalue+=','
+        sqlvalue += `submission_category ='${order.submission_category}'`
+    }
+    if(order.po_date){
+        if(sqlvalue!='') sqlvalue+=','
+        sqlvalue += `po_date ='${order.po_date}'`
+    }
+    if(order.project_single){
+        if(sqlvalue!='') sqlvalue+=','
+        sqlvalue += `project_single ='${order.project_single}'`
+    }
+    if(order.sitename){
+        if(sqlvalue!='') sqlvalue+=','
+        sqlvalue += `sitename ='${order.sitename}'`
+    }
+    if(order.contact_no){
+        if(sqlvalue!='') sqlvalue+=','
+        sqlvalue += `contact_no ='${order.contact_no}'`
+    }
+    if(order.assign_by){
+        if(sqlvalue!='') sqlvalue+=','
+        sqlvalue += `assign_by ='${order.assign_by}'`
+    }
+    if(order.sc_name){
+        if(sqlvalue!='') sqlvalue+=','
+        sqlvalue += `sc_name ='${order.sc_name}'`
+    }
+    if(order.sd_manager){
+        if(sqlvalue!='') sqlvalue+=','
+        sqlvalue += `sd_manager ='${order.sd_manager}'`
+    }
+
+    if(order.name){
+        if(sqlvalue!='') sqlvalue+=','
+        sqlvalue += `name ='${order.name}'`
+    }
+    if(order.type){
+        if(sqlvalue!='') sqlvalue+=','
+        sqlvalue += `type ='${order.type}'`
+    }
+    if(order.size){
+        if(sqlvalue!='') sqlvalue+=','
+        sqlvalue += `size ='${order.size}'`
+    }
+    if(order.name2){
+        if(sqlvalue!='') sqlvalue+=','
+        sqlvalue += `name2 ='${order.name2}'`
+    }
+    if(order.type2){
+        if(sqlvalue!='') sqlvalue+=','
+        sqlvalue += `type2 ='${order.type2}'`
+    }
+    if(order.size2){
+        if(sqlvalue!='') sqlvalue+=','
+        sqlvalue += `size2 ='${order.size2}'`
+    }
+    if(order.name3){
+        if(sqlvalue!='') sqlvalue+=','
+        sqlvalue += `name3 ='${order.name3}'`
+    }
+    if(order.type3){
+        if(sqlvalue!='') sqlvalue+=','
+        sqlvalue += `type3 ='${order.type3}'`
+    }
+    if(order.size3){
+        if(sqlvalue!='') sqlvalue+=','
+        sqlvalue += `size3 ='${order.size3}'`
+    }
+    if(order.name4){
+        if(sqlvalue!='') sqlvalue+=','
+        sqlvalue += `name4 ='${order.name4}'`
+    }
+    if(order.type4){
+        if(sqlvalue!='') sqlvalue+=','
+        sqlvalue += `type4 ='${order.type4}'`
+    }
+    if(order.size4){
+        if(sqlvalue!='') sqlvalue+=','
+        sqlvalue += `size4 ='${order.size4}'`
+    }
+    // if(order.order_type){
+    //     if(sqlvalue!='') sqlvalue+=','
+    //     sqlvalue += `order_type ='${order.order_type}'`
+    // }
+    // if(order.order_type){
+    //     if(sqlvalue!='') sqlvalue+=','
+    //     sqlvalue += `order_type ='${order.order_type}'`
+    // }
+    
+    sql += sqlvalue + ` WHERE id='${id}'`
+    console.log(sql);
+
     const result = await db.query(
-        ``
+        sql
     );
     let message = error.RECORD_ERROR;
-    if(!result && result.length != 0){
+    if(result.affectedRows){
         message = error.RECORD_UPDATED;
     }
     return {message};
@@ -266,7 +483,7 @@ module.exports = {
     findById,
     create,
     create2,
-    update,
+    findByIdAndUpdate,
     remove
 }
 
