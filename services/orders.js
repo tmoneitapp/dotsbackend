@@ -205,33 +205,33 @@ async function create(order){
     //console.log(sql);
 
     // create order table first
-    // const result = await db.query(
-    //    sql
-    // )
+    const result = await db.query(
+       sql
+    )
     let message = error.RECORD_ERROR;
 
-    await db.query(sql)
-    .then((result) =>{
+    // await db.query(sql)
+    // .then((result) =>{
 
-        if(result.affectedRows){
-            console.log(result);
-            if(files){
-                let sql2 = ``;
-            }
-        }
-        else {
-            return {message}
-        }
+    //     if(result.affectedRows){
+    //         console.log(result);
+    //         if(files){
+    //             let sql2 = ``;
+    //         }
+    //     }
+    //     else {
+    //         return {message}
+    //     }
 
-    })
-    .catch((err)=> next(err));
+    // })
+    // .catch((err)=> next(err));
     
     //console.log(result);
     
-    // if(result.affectedRows){
-    //     message = error.RECORD_CREATED;
-    // }
-    // return {message};
+    if(result.affectedRows){
+        message = error.RECORD_CREATED;
+    }
+    return {message};
 }
 
 

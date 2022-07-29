@@ -19,24 +19,7 @@ router.get('/', authenticate.authenticateToken, (req, res, next) =>{
   .catch((err) => next(err));
 });
 
-// router.get('/:userId', authenticate.authenticateToken, (req, res, next) =>{
-//   users.findByUserId(req.params.userId)
-//   .then((user) =>{
-//     if(user == error.RECORD_EMPTY){
-//       res.statusCode = 400;
-//       res.end();
-//       // res.statusCode =200;
-//       // res.setHeader('Content-Type','application/json');
-//       // res.json({success:false, status: error.RECORD_EMPTY});
-//     }
-//     else{
-//       res.statusCode =200;
-//       res.setHeader('Content-Type','application/json');
-//       res.json(user);
-//     }
-//   }, (err) => next(err))
-//   .catch((err) => next(err));
-// });
+
 
 router.get('/profile2', authenticate.authenticateToken, (req, res, next) =>{
   console.log(res.locals);
@@ -77,10 +60,16 @@ router.route('/profile')
 })
 .put(authenticate.authenticateToken, (req, res, next) =>{
   users.findByIdAndUpdate(res.locals._id, req.body)
-  .then((result) =>{  
-    res.statusCode =200;
+  .then((user) =>{  
+    if(user == error.RECORD_ERROR){
+      res.statusCode=400;
+      res.end();
+    }
+    else{
+      res.statusCode =200;
       res.setHeader('Content-Type','application/json');
-      res.json(result);
+      res.json(user);
+    }
   }, (err) => next(err))
   .catch((err) => next(err));
 });
@@ -123,17 +112,10 @@ router.post('/login', (req,res,next) =>{
         // res.json({success:false, status: error.USER_INVALID_USERNAME});
       }
       else {
-        // console.log(user.username);
-        // console.log(user[0].username);
         var accessToken = authenticate.getToken({ _id: user[0].userid});
         var refreshToken = authenticate.getRefreshToken({ _id: user[0].userid});
         refreshTokens[refreshToken] = user[0].userid;
         var expiresAt = authenticate.getExpiresAt(accessToken);
-
-console.log(expiresAt); // this one undefined 
-      //   jwt.verify(accessToken, config.secretKey, (err, result) =>{
-      //     expiresAt = result.exp;
-      // });
 
         res.statusCode = 200;
         res.setHeader('Content-Type','application/json');
@@ -150,6 +132,38 @@ router.post('/logout', (req,res,next) =>{
     delete refreshTokens[refreshToken];
   }
   res.sendStatus(204); //success with no content
+});
+
+router.route('/:userId')
+.get(authenticate.authenticateToken, (req, res, next) =>{
+  users.findByUserId(req.params.userId)
+  .then((user) =>{
+    if(user == error.RECORD_EMPTY){
+      res.statusCode = 400;
+      res.end();
+    }
+    else{
+      res.statusCode =200;
+      res.setHeader('Content-Type','application/json');
+      res.json(user);
+    }
+  }, (err) => next(err))
+  .catch((err) => next(err));
+})
+.put(authenticate.authenticateToken, (req, res, next) =>{
+  users.findByIdAndUpdate(req.params.userId, req.body)
+  .then((user) =>{  
+    if(user == error.RECORD_ERROR){
+      res.statusCode=400;
+      res.end();
+    }
+    else{
+      res.statusCode =200;
+      res.setHeader('Content-Type','application/json');
+      res.json(user);
+    }
+  }, (err) => next(err))
+  .catch((err) => next(err));
 });
 
 module.exports = router;

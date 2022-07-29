@@ -132,9 +132,9 @@ async function findByIdAndUpdate(id, user){
     const result = await db.query(
         sql
     );
-    let message = 'Error in updating user';
+    let message = error.RECORD_ERROR;
     if (result.affectedRows){
-        message = 'User updated successfully';
+        message = error.RECORD_UPDATED; // 'User updated successfully';
     }
     return {message};
 }

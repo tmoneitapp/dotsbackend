@@ -1,5 +1,12 @@
 const config={
     db: {
+        // pc server configuration locally
+        host: "localhost",
+        user: "dotsuser",
+        password: "Passw0rd123!@#",
+        database: "dots",
+    },
+    db1: {
         // openshift configuration
         host: "172.16.112.118",
         user: "root",
