@@ -25,9 +25,7 @@ async function findByUserId(userid){
     if(rows.length != 0){
         return rows[0];
     }
-    else{
-        return error.RECORD_EMPTY;
-    }
+    return error.RECORD_EMPTY;
 }
 
 async function getLogin(username, password){

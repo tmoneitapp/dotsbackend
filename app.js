@@ -5,16 +5,9 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var cors = require('cors');
 var passport = require('passport');
-var swaggerUi = require('swagger-ui-express'),
-  swaggerDocument = require('./swagger.json');
+
 
 //import { swaggerDocument } from './swagger';
-
-
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
-var ordersRouter = require('./routes/orders');
-var dashboardRouter = require('./routes/dashboard');
 
 
 var app = express();
@@ -41,10 +34,32 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 
-app.use('/', indexRouter);
+var indexRouter = require('./routes/index');
+app.use('/api', indexRouter);
+
+var usersRouter = require('./routes/users');
 app.use('/api/users', usersRouter);
+
+var ordersRouter = require('./routes/orders');
 app.use('/api/orders',ordersRouter);
+
+var dashboardRouter = require('./routes/dashboard');
 app.use('/api/dashboard', dashboardRouter);
+
+var cdyRouter = require('./routes/cdy');
+app.use('/api/cdys',cdyRouter);
+
+var pmRouter = require('./routes/pm');
+app.use('/api/pms',pmRouter);
+
+var orderTypeRouter = require('./routes/ordertype');
+app.use('/api/ordertypes', orderTypeRouter);
+
+var productTypeRouter = require('./routes/producttype');
+app.use('/api/producttypes', productTypeRouter);
+
+var swaggerUi = require('swagger-ui-express'),
+  swaggerDocument = require('./swagger.json');
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 // catch 404 and forward to error handler

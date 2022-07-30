@@ -1,11 +1,9 @@
 var express = require('express');
 var bodyParser = require('body-parser');
-var router = express.Router();
 var orders = require('../services/orders');
 var authenticate = require('../services/authenticate');
 var error = require('../shared/error');
 var multer = require('multer');
-var os = require('os');
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) =>{
@@ -33,36 +31,6 @@ const upload = multer({
     // }
 });
 
-// app.post('/rest/upload',
-//          upload.fields([{
-//            name: 'video', maxCount: 1
-//          }, {
-//            name: 'subtitles', maxCount: 1
-//          }]), function(req, res, next){
-//   // ...
-// }
-// file.mimetype === 'application/pdf' ||
-//       file.mimetype === 'application/msword' ||
-//       file.mimetype === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
-
-// const fs = require('file-system');
- 
-// app.post('/uploadphoto', upload.single('myImage'), (req, res) => {
-//     var img = fs.readFileSync(req.file.path);
-//     var encode_image = img.toString('base64');
-//     // Define a JSONobject for the image attributes for saving to database
- 
-//     var finalImg = {
-//         contentType: req.file.mimetype,
-//         image: Buffer.from(encode_image, 'base64')
-//     };
-//      db.collection('myCollection').insertOne(finalImg, (err, result) => {
-//         console.log(result)
-//         if (err) return console.log(err)
-//         console.log('saved to database')
-//         res.redirect('/')
-//     })
-// })
 
 // app.get('/photos', (req, res) => {
 //     db.collection('myCollection').find().toArray((err, result) => {
@@ -93,34 +61,8 @@ const upload = multer({
 //     name: 'image4', maxCount: 1
 // }])
 
-// if(req.files.upload instanceof Array){ 
-//     for (var i = 0; i < req.files.upload.length; i ++ ){
-//         let name = req.files.upload[i].name;
-//         let data = req.files.upload[i].data;
-//         let write = writeFile(name, data);
-
-//         console.log(req.files.upload[i].name);
-
-//         write.then(()=> res.end('fileS uploaded'))
-//         .catch((e)=> res.status(500).send(e.message));
-
-//     } 
-
-//     }else {
-
-//         // let name = req.files.upload.name;
-//         // let data = req.files.upload.data;
-
-//         // writeFile(name, data)
-
-//         // res.end("file uploaded")
-
-// }
-// });
-
 var uploadMultiple = upload.fields([{ name: 'file1', maxCount: 10 }, { name: 'file2', maxCount: 10 }])
  
-
 var orderRouter = express.Router();
 orderRouter.use(bodyParser.json());
 
@@ -190,10 +132,16 @@ orderRouter.route('/')
 
     orders.create(req)
     .then((order) =>{
-        console.log('Order Created', order);
-        res.statusCode =201;
-        res.setHeader('Content-Type','application/json');
-        res.json(order);
+        if(order == error.RECORD_ERROR){
+            res.statusCode=400;
+            res.end();
+        }
+        else{
+            console.log('Order Created', order);
+            res.statusCode =201;
+            res.setHeader('Content-Type','application/json');
+            res.json(order);
+        }
     })
     .catch((err) => next(err));
 })
