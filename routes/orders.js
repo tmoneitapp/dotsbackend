@@ -154,6 +154,24 @@ orderRouter.route('/')
     res.end('DELETE operation not ready on /orders');
 });
 
+orderRouter.route('/filter')
+.get(authenticate.authenticateToken, (req, res, next) =>{
+    if(req.query.status){
+        const status = req.query.status;
+        orders.find({'status': status})
+        .then((orders) =>{
+            res.statusCode = 200;
+            res.setHeader('Content-Type','application/json');
+            res.json(orders);         
+        }, (err) => next(err))
+        .catch((err) => next(err));
+    }
+
+    // return bad request by default
+    res.statusCode=400;
+    res.end();
+});
+
 orderRouter.route('/:orderId')
 .get(authenticate.authenticateToken, (req, res, next) =>{
     orders.findById(req.params.orderId)

@@ -38,6 +38,23 @@ async function findById(id){
     return rows[0];
 }
 
+async function find(query){
+    let sql = '';
+
+    if(query.status){
+        sql = `SELECT * FROM orders WHERE form_status ='${query.status}' LIMIT 2000`
+    }
+    else{
+        sql = `SELECT * FROM orders LIMIT 2000`
+    }
+
+    const rows = await db.query(
+        sql
+    )
+    return rows;
+}
+
+
 async function create2(order){
     var files = order.files; 
     var order = order.body;
@@ -611,6 +628,7 @@ module.exports = {
     getDashboard_OrderType,
     getDashboard_ProductType,
     findById,
+    find,
     create,
     create2,
     findByIdAndUpdate,
