@@ -166,10 +166,13 @@ orderRouter.route('/filter')
         }, (err) => next(err))
         .catch((err) => next(err));
     }
+    else{
+        // return bad request by default
+        res.statusCode=400;
+        res.end();
+    }
 
-    // return bad request by default
-    res.statusCode=400;
-    res.end();
+    
 });
 
 orderRouter.route('/:orderId')
