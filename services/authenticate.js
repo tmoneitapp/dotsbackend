@@ -31,7 +31,7 @@ exports.getExpiresAt = function(token) {
         if(err){
             console.log(`getExpiresAt error: ${err}`);    
         }
-        console.log(`getExpiresAt result: ${result.exp}`);
+        //console.log(`getExpiresAt result: ${result.exp}`);
         expiresAt = result.exp;
     });
     return expiresAt;

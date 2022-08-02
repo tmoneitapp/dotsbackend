@@ -272,6 +272,18 @@ async function create(order){
             order.size4 = files['file4'][0].size;
             order.content4 = files['file4'][0].buffer.toString('base64');
         }
+        if(files['file5']){
+            order.name5 = files['file5'][0].originalname;
+            order.type5 = files['file5'][0].mimetype;
+            order.size5 = files['file5'][0].size;
+            order.content5 = files['file5'][0].buffer.toString('base64');
+        }
+        if(files['file6']){
+            order.name6 = files['file6'][0].originalname;
+            order.type6 = files['file6'][0].mimetype;
+            order.size6 = files['file6'][0].size;
+            order.content6 = files['file6'][0].buffer.toString('base64');
+        }  
     }
 
     if(order.order_type === undefined) order.order_type='';
@@ -317,6 +329,12 @@ async function create(order){
     if(order.name4 === undefined) order.name4='';
     if(order.type4 === undefined) order.type4='';
     if(order.size4 === undefined) order.size4=0;
+    if(order.name5 === undefined) order.name5='';
+    if(order.type5 === undefined) order.type5='';
+    if(order.size5 === undefined) order.size5=0;
+    if(order.name6 === undefined) order.name6='';
+    if(order.type6 === undefined) order.type6='';
+    if(order.size6 === undefined) order.size6=0;
     if(order.sc_name === undefined) order.sc_name='';
     if(order.sd_manager === undefined) order.sd_manager='';
 
@@ -332,6 +350,8 @@ async function create(order){
             , name2, type2, size2, content2
             , name3, type3, size3, content3
             , name4, type4, size4, content4
+            , name5, type5, size5, content5
+            , name6, type6, size6, content6
             , sc_name, sd_manager, pricing, quartely
             , yearly
             ) VALUES ('${order.order_type}', '${order.service_id}', '${order.network_id}', '${order.product_type}'
@@ -346,6 +366,8 @@ async function create(order){
             , '${order.name2}', '${order.type2}', '${order.size2}', '${order.content2}'
             , '${order.name3}', '${order.type3}', '${order.size3}', '${order.content3}'
             , '${order.name4}', '${order.type4}', '${order.size4}', '${order.content4}'
+            , '${order.name5}', '${order.type5}', '${order.size5}', '${order.content5}'
+            , '${order.name6}', '${order.type6}', '${order.size6}', '${order.content6}'
             , '${order.sc_name}', '${order.sd_manager}', '${order.pricing}', '${order.quartely}'
             , '${order.yearly}'
             )`;
@@ -414,6 +436,36 @@ async function findByIdAndUpdate(id, order){
             order.type4 = files['file4'][0].mimetype;
             order.size4 = files['file4'][0].size;
             order.content4 = files['file4'][0].buffer.toString('base64');
+        }
+        if(files['file5']){
+            order.name5 = files['file5'][0].originalname;
+            order.type5 = files['file5'][0].mimetype;
+            order.size5 = files['file5'][0].size;
+            order.content5 = files['file5'][0].buffer.toString('base64');
+        }
+        if(files['file6']){
+            order.name6 = files['file6'][0].originalname;
+            order.type6 = files['file6'][0].mimetype;
+            order.size6 = files['file6'][0].size;
+            order.content6 = files['file6'][0].buffer.toString('base64');
+        }
+        if(files['file7']){
+            order.name7 = files['file7'][0].originalname;
+            order.type7 = files['file7'][0].mimetype;
+            order.size7 = files['file7'][0].size;
+            order.content7 = files['file7'][0].buffer.toString('base64');
+        }
+        if(files['file8']){
+            order.name8 = files['file8'][0].originalname;
+            order.type8 = files['file8'][0].mimetype;
+            order.size8 = files['file8'][0].size;
+            order.content8 = files['file8'][0].buffer.toString('base64');
+        }
+        if(files['file9']){
+            order.name9 = files['file9'][0].originalname;
+            order.type9 = files['file9'][0].mimetype;
+            order.size9 = files['file9'][0].size;
+            order.content9 = files['file9'][0].buffer.toString('base64');
         }
     }
 
@@ -553,6 +605,10 @@ async function findByIdAndUpdate(id, order){
         if(sqlvalue!='') sqlvalue+=','
         sqlvalue += `size ='${order.size}'`
     }
+    if(order.content){
+        if(sqlvalue!='') sqlvalue+=','
+        sqlvalue += `content ='${order.content}'`
+    }
     if(order.name2){
         if(sqlvalue!='') sqlvalue+=','
         sqlvalue += `name2 ='${order.name2}'`
@@ -564,6 +620,10 @@ async function findByIdAndUpdate(id, order){
     if(order.size2){
         if(sqlvalue!='') sqlvalue+=','
         sqlvalue += `size2 ='${order.size2}'`
+    }
+    if(order.content2){
+        if(sqlvalue!='') sqlvalue+=','
+        sqlvalue += `content2 ='${order.content2}'`
     }
     if(order.name3){
         if(sqlvalue!='') sqlvalue+=','
@@ -577,6 +637,10 @@ async function findByIdAndUpdate(id, order){
         if(sqlvalue!='') sqlvalue+=','
         sqlvalue += `size3 ='${order.size3}'`
     }
+    if(order.content3){
+        if(sqlvalue!='') sqlvalue+=','
+        sqlvalue += `content3 ='${order.content3}'`
+    }
     if(order.name4){
         if(sqlvalue!='') sqlvalue+=','
         sqlvalue += `name4 ='${order.name4}'`
@@ -589,6 +653,74 @@ async function findByIdAndUpdate(id, order){
         if(sqlvalue!='') sqlvalue+=','
         sqlvalue += `size4 ='${order.size4}'`
     }
+    if(order.content4){
+        if(sqlvalue!='') sqlvalue+=','
+        sqlvalue += `content4 ='${order.content4}'`
+    }
+    if(order.name5){
+        if(sqlvalue!='') sqlvalue+=','
+        sqlvalue += `name5 ='${order.name5}'`
+    }
+    if(order.type5){
+        if(sqlvalue!='') sqlvalue+=','
+        sqlvalue += `type5 ='${order.type5}'`
+    }
+    if(order.size6){
+        if(sqlvalue!='') sqlvalue+=','
+        sqlvalue += `size6 ='${order.size6}'`
+    }
+    if(order.content6){
+        if(sqlvalue!='') sqlvalue+=','
+        sqlvalue += `content6 ='${order.content6}'`
+    }
+    if(order.name7){
+        if(sqlvalue!='') sqlvalue+=','
+        sqlvalue += `name7 ='${order.name7}'`
+    }
+    if(order.type7){
+        if(sqlvalue!='') sqlvalue+=','
+        sqlvalue += `type7 ='${order.type7}'`
+    }
+    if(order.size7){
+        if(sqlvalue!='') sqlvalue+=','
+        sqlvalue += `size7 ='${order.size7}'`
+    }
+    if(order.content7){
+        if(sqlvalue!='') sqlvalue+=','
+        sqlvalue += `content7 ='${order.content7}'`
+    }
+    if(order.name8){
+        if(sqlvalue!='') sqlvalue+=','
+        sqlvalue += `name8 ='${order.name8}'`
+    }
+    if(order.type8){
+        if(sqlvalue!='') sqlvalue+=','
+        sqlvalue += `type8 ='${order.type8}'`
+    }
+    if(order.size8){
+        if(sqlvalue!='') sqlvalue+=','
+        sqlvalue += `size8 ='${order.size8}'`
+    }
+    if(order.content8){
+        if(sqlvalue!='') sqlvalue+=','
+        sqlvalue += `content8 ='${order.content8}'`
+    }
+    if(order.name9){
+        if(sqlvalue!='') sqlvalue+=','
+        sqlvalue += `name9 ='${order.name9}'`
+    }
+    if(order.type9){
+        if(sqlvalue!='') sqlvalue+=','
+        sqlvalue += `type9 ='${order.type9}'`
+    }
+    if(order.size9){
+        if(sqlvalue!='') sqlvalue+=','
+        sqlvalue += `size9 ='${order.size9}'`
+    }
+    if(order.content9){
+        if(sqlvalue!='') sqlvalue+=','
+        sqlvalue += `content9 ='${order.content9}'`
+    }
     // if(order.order_type){
     //     if(sqlvalue!='') sqlvalue+=','
     //     sqlvalue += `order_type ='${order.order_type}'`
@@ -599,7 +731,7 @@ async function findByIdAndUpdate(id, order){
     // }
     
     sql += sqlvalue + ` WHERE id='${id}'`
-    console.log(sql);
+    //console.log(sql);
 
     const result = await db.query(
         sql

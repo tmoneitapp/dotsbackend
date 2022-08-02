@@ -127,6 +127,10 @@ orderRouter.route('/')
         name: 'file3', maxCount: 1
     }, {
         name: 'file4', maxCount: 1
+    }, {
+        name: 'file5', maxCount: 1
+    }, {
+        name: 'file6', maxCount: 1
     }])
     , (req, res, next) =>{
 
@@ -194,6 +198,16 @@ orderRouter.route('/:orderId')
         name: 'file3', maxCount: 1
     }, {
         name: 'file4', maxCount: 1
+    }, {
+        name: 'file5', maxCount: 1
+    }, {
+        name: 'file6', maxCount: 1
+    }, {
+        name: 'file7', maxCount: 1
+    }, {
+        name: 'file8', maxCount: 1
+    }, {
+        name: 'file9', maxCount: 1
     }]), (req, res, next) =>{
     orders.findByIdAndUpdate(req.params.orderId, req)
     .then((order) =>{
