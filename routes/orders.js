@@ -132,7 +132,7 @@ orderRouter.route('/')
 
     orders.create(req)
     .then((order) =>{
-        if(order == error.RECORD_ERROR){
+        if(order.message == error.RECORD_ERROR){
             res.statusCode=400;
             res.end();
         }
@@ -179,7 +179,6 @@ orderRouter.route('/:orderId')
 .get(authenticate.authenticateToken, (req, res, next) =>{
     orders.findById(req.params.orderId)
     .then((order) =>{
-        console.log(order);
         res.statusCode = 200;
         res.setHeader('Content-Type','application/json');
         res.json(order);
@@ -198,7 +197,7 @@ orderRouter.route('/:orderId')
     }]), (req, res, next) =>{
     orders.findByIdAndUpdate(req.params.orderId, req)
     .then((order) =>{
-        if(order == error.RECORD_ERROR){
+        if(order.message == error.RECORD_ERROR){
             res.statusCode=400;
             res.end();
         }
@@ -211,8 +210,19 @@ orderRouter.route('/:orderId')
     .catch((err) => next(err));
 })
 .delete((req, res, next) =>{
-    res.statusCode = 403;
-    res.end('DELETE operation not ready on /orders');
+    orders.findByIdAndRemove(req.params.orderId)
+    .then((resp) =>{
+        if(resp.message == error.RECORD_ERROR){
+            res.statusCode=400;
+            res.end();
+        }
+        else{
+            res.statusCode = 200;
+            res.setHeader('Content-Type','application/json');
+            res.json(resp);
+        }
+    }, (err) => next(err))
+    .catch((err) =>next(err));
 });
 
 orderRouter.route('/:orderId/details')

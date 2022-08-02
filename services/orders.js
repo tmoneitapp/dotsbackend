@@ -7,7 +7,7 @@ async function getMultiple(){
     //const offset = helper.getOffset(page, config.listPerPage);
     const rows = await db.query(
         `SELECT * 
-        FROM orders LIMIT 100
+        FROM orders WHERE isdeleted=0
         `
     );
     return rows;
@@ -611,16 +611,15 @@ async function findByIdAndUpdate(id, order){
     return {message};
 }
 
-async function remove(id){
+async function findByIdAndRemove(id){
     const result = await db.query(
-        ``
+        `UPDATE orders SET isdeleted=1 WHERE id='${id}'`
     );
     let message = error.RECORD_ERROR;
-    if(!result && result.length != 0){
+    if(result.affectedRows){
         message = error.RECORD_DELETED;
     }
     return {message};
-    
 }
 
 module.exports = {
@@ -632,6 +631,6 @@ module.exports = {
     create,
     create2,
     findByIdAndUpdate,
-    remove
+    findByIdAndRemove
 }
 

@@ -20,7 +20,7 @@ orderTypeRouter.route('/')
 .post(authenticate.authenticateToken, (req, res, next) =>{
     orderTypes.create(req.body)
     .then((orderType) =>{
-        if(orderType == error.RECORD_ERROR){
+        if(orderType.message == error.RECORD_ERROR){
             res.statusCode=400;
             res.end();
         }
@@ -46,7 +46,7 @@ orderTypeRouter.route('/:Id')
 .put(authenticate.authenticateToken, (req, res, next) =>{
     orderTypes.findByIdAndUpdate(req.params.Id, req.body)
     .then((orderType) =>{
-        if(orderType ==error.RECORD_ERROR){
+        if(orderType.message ==error.RECORD_ERROR){
             res.statusCode=400;
             res.end();
         }
