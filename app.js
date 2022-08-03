@@ -58,8 +58,12 @@ app.use('/api/ordertypes', orderTypeRouter);
 var productTypeRouter = require('./routes/producttype');
 app.use('/api/producttypes', productTypeRouter);
 
+var dropDownRouter = require('./routes/dropdown');
+app.use('/api/dropdown', dropDownRouter);
+
 var swaggerUi = require('swagger-ui-express'),
   swaggerDocument = require('./swagger.json');
+const dropdownRouter = require('./routes/dropdown');
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 // catch 404 and forward to error handler
