@@ -4,22 +4,20 @@ const config = require('../config');
 const error = require('../shared/error');
 
 async function find(query){
-    let sql = '';
-    if(query.type){
-        sql = `SELECT * FROM dropdown WHERE type ='${query.type}'`
+    let sql='';
+    if(query.name){
+        sql = `SELECT * FROM roles WHERE name='${query.name}'`
     }
-    else {
-        sql = `SELECT * FROM dropdown`
+    else{
+        sql = `SELECT * FROM roles`
     }
-    const rows = await db.query(
-        sql
-    )
+    const rows = await db.query(sql)
     return rows;
 }
 
 async function findById(id){
     const rows = await db.query(
-        `SELECT * FROM dropdown WHERE uuid='${id}'`
+        `SELECT * FROM roles WHERE uuid='${id}'`
     );
     if(rows.length!=0){
         return rows[0];
@@ -27,28 +25,28 @@ async function findById(id){
     return error.RECORD_EMPTY;
 }
 
-async function findByIdAndUpdate(id, dropdown){
-    let sql ='UPDATE dropdown SET ';
+async function findByIdAndUpdate(id, role){
+    let sql = 'UPDATE roles SET ';
     let sqlvalue ='';
 
-    if(dropdown.type){
+    if(role.name){
         if(sqlvalue!='') sqlvalue+=','
-        sqlvalue += `type='${dropdown.type}'`
+        sqlvalue += `name='${role.name}'`
     }
-    if(dropdown.value){
+    if(role.description){
         if(sqlvalue!='') sqlvalue+=','
-        sqlvalue += `value='${dropdown.value}'`
+        sqlvalue += `description='${role.description}'`
     }
-    if(dropdown.display){
+    if(role.authority){
         if(sqlvalue!='') sqlvalue+=','
-        sqlvalue += `display='${dropdown.display}'`
+        sqlvalue += `authority='${role.authority}'`
     }
     sql += sqlvalue + ` WHERE uuid='${id}'`
-    
+
     let message = error.RECORD_ERROR;
     const result = await db.query(sql)
     if(result.affectedRows){
-        const rows = await db.query(`SELECT * FROM dropdown where uuid = '${id}'`)
+        const rows = await db.query(`SELECT * FROM roles WHERE uuid='${id}'`)
         return rows[0];
     }
     return {message}
@@ -56,7 +54,7 @@ async function findByIdAndUpdate(id, dropdown){
 
 async function findByIdAndRemove(id){
     const result = await db.query(
-        `DELETE FROM dropdown WHERE uuid='${id}'`
+        `DELETE FROM roles WHERE uuid='${id}'`
     );
     let message = error.RECORD_ERROR;
     if(result.affectedRows){
@@ -65,16 +63,16 @@ async function findByIdAndRemove(id){
     return {message}
 }
 
-async function create(dropdown){
-    let sql = `INSERT INTO dropdown(uuid, type, value, display, disabled)
-            VALUES(uuid(), '${dropdown.type}','${dropdown.value}','${dropdown.display}',0)`
-    
+async function create(role){
+    let sql = `INSERT INTO roles(uuid, name, description, authority) 
+            VALUES(uuid(), '${role.name}','${role.description}','${role.authority}')`
+
     let message = error.RECORD_ERROR;
     try {
         const result = await db.query(sql)
-        
+
         if(result.affectedRows){
-            const rows = await db.query(`SELECT * FROM dropdown where id = '${result.insertId}'`)
+            const rows = await db.query(`SELECT * FROM roles WHERE id='${result.insertId}'`)
             return rows[0];
         }
         return {message}

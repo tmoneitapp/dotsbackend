@@ -7,7 +7,7 @@ const crypto = require('crypto');
 async function getMultiple(){
     const rows = await db.query(
         `SELECT id, name, username, email, userlevel, sektor, cost, 
-        mobile_no, del_no, staff_id, entgov, funct, timestamp
+        mobile_no, del_no, staff_id, entgov, funct, timestamp, role_id, authority, userid
         FROM users`
     );
     return rows;
@@ -18,7 +18,7 @@ async function findByUserId(userid){
     
     const rows = await db.query(
         `SELECT id, name, username, email, userlevel, sektor, cost, 
-        mobile_no, del_no, staff_id, entgov, funct, timestamp, userid
+        mobile_no, del_no, staff_id, entgov, funct, timestamp, role_id, authority, userid
         FROM users 
         WHERE userid = '${userid}' limit 1; `
     );
@@ -31,7 +31,7 @@ async function findByUserId(userid){
 async function getLogin(username, password){
     const rows = await db.query(
         `SELECT id, name, username, email, userlevel, sektor, cost, 
-        mobile_no, del_no, staff_id, entgov, funct, timestamp, password, userid
+        mobile_no, del_no, staff_id, entgov, funct, timestamp, password, userid, role_id, authority 
         FROM users 
         WHERE username = '${username}' limit 1; `
     );
@@ -116,10 +116,18 @@ async function findByIdAndUpdate(id, user){
         if(sqlvalue!='') sqlvalue+=','
         sqlvalue += `username='${user.username}'`
     }
+    if(user.role_id){
+        if(sqlvalue!='') sqlvalue+=','
+        sqlvalue += `role_id='${user.role_id}'`
+    }
+    if(user.authority){
+        if(sqlvalue!='') sqlvalue+=','
+        sqlvalue += `authority='${user.authority}'`
+    }
 
     sql += sqlvalue + ` WHERE userid = '${id}'`
 
-    console.log(sql);
+    //console.log(sql);
 
     const result = await db.query(
         sql
@@ -133,7 +141,7 @@ async function findByIdAndUpdate(id, user){
 
 async function remove(id){
     const result = await db.query(
-        `DELETE FROM user WHERE id = ${id}`
+        `DELETE FROM user WHERE userid = ${id}`
     );
     let message = 'Error in deleting user';
     if(result.affectedRows){

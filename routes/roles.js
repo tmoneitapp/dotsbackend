@@ -3,78 +3,76 @@ var bodyParser = require('body-parser');
 var authenticate = require('../services/authenticate');
 var error = require('../shared/error');
 
-var dropdowns = require('../services/dropdown');
+var roles = require('../services/roles');
 
-var dropdownRouter = express.Router();
-dropdownRouter.use(bodyParser.json());
+var roleRouter = express.Router();
+roleRouter.use(bodyParser.json());
 
-dropdownRouter.route('/')
+roleRouter.route('/')
 .get(authenticate.authenticateToken, (req, res, next) =>{
-    // If API been called with filter /?type=ORDER_TYPE
-    if(req.query.type){
-        const type = req.query.type;
-        dropdowns.find({'type': type})
-        .then((dropdowns) =>{
+    if(req.query.name){
+        const name = req.query.name;
+        roles.find({'name':name})
+        .then((roles) => {
             res.statusCode=200;
             res.setHeader('Content-Type','application/json');
-            res.json(dropdowns);
+            res.json(roles);
         }, (err) => next(err))
         .catch((err) => next(err));
     }
     else{
-        dropdowns.find({})
-        .then((dropdowns) => {
+        roles.find({})
+        .then((roles) =>{
             res.statusCode=200;
             res.setHeader('Content-Type','application/json');
-            res.json(dropdowns);
+            res.json(roles);
         }, (err) => next(err))
         .catch((err) => next(err));
     }
 })
 .post(authenticate.authenticateToken, (req, res, next) =>{
-    dropdowns.create(req.body)
-    .then((dropdown) =>{
-        if(dropdown.message == error.RECORD_ERROR){
+    roles.create(req.body)
+    .then((role) =>{
+        if(role.message == error.RECORD_ERROR){
             res.statusCode=400;
             res.end();
         }
         else{
             res.statusCode=201;
             res.setHeader('Content-Type','application/json');
-            res.json(dropdown);
+            res.json(role);
         }
-        
     }, (err) => next(err))
     .catch((err) => next(err));
 });
 
-dropdownRouter.route('/:uuid')
+roleRouter.route('/:uuid')
 .get(authenticate.authenticateToken, (req, res, next) =>{
-    dropdowns.findById(req.params.uuid)
-    .then((dropdown) =>{
+    roles.findById(req.params.uuid)
+    .then((role) =>{
         res.statusCode = 200;
         res.setHeader('Content-Type','application/json');
-        res.json(dropdown);
+        res.json(role);
     }, (err) => next(err))
     .catch((err) => next(err));
 })
-.put(authenticate.authenticateToken, (req, res, next) =>{
-    dropdowns.findByIdAndUpdate(req.params.uuid, req.body)
-    .then((dropdown) =>{    
-        if(dropdown.message == error.RECORD_ERROR){
+.put(authenticate.authenticateToken, (req, res, next) => {
+    roles.findByIdAndUpdate(req.params.uuid, req.body)
+    .then((role) =>{    
+        if(role.message == error.RECORD_ERROR){
             res.statusCode=400;
             res.end();
         }
         else{
             res.statusCode =200;
             res.setHeader('Content-Type','application/json');
-            res.json(dropdown);
+            res.json(role);
         }
     }, (err) => next(err))
     .catch((err) => next(err));
 })
-.delete(authenticate.authenticateToken, (req, res, next) =>{
-    dropdowns.findByIdAndRemove(req.params.uuid)
+.put(authenticate.authenticateToken, (req, res, next) =>{
+    roles.findByIdAndRemove(req.params.uuid)
     .then((resp) => {
         if(resp.message == error.RECORD_ERROR){
             res.statusCode=400;
@@ -89,4 +87,4 @@ dropdownRouter.route('/:uuid')
     .catch((err) => next(err));
 });
 
-module.exports = dropdownRouter;
+module.exports = roleRouter;

@@ -3,78 +3,77 @@ var bodyParser = require('body-parser');
 var authenticate = require('../services/authenticate');
 var error = require('../shared/error');
 
-var dropdowns = require('../services/dropdown');
+var authoritys = require('../services/authority');
 
-var dropdownRouter = express.Router();
-dropdownRouter.use(bodyParser.json());
+var authorityRouter = express.Router();
+authorityRouter.use(bodyParser.json());
 
-dropdownRouter.route('/')
+authorityRouter.route('/')
 .get(authenticate.authenticateToken, (req, res, next) =>{
-    // If API been called with filter /?type=ORDER_TYPE
-    if(req.query.type){
-        const type = req.query.type;
-        dropdowns.find({'type': type})
-        .then((dropdowns) =>{
+    //If API been called with fileter /?identifier=order
+    if(req.query.identifier){
+        const indentifier = req.query.indentifier;
+        authoritys.find({'identifier':identifier})
+        .then((authoritys) =>{
             res.statusCode=200;
             res.setHeader('Content-Type','application/json');
-            res.json(dropdowns);
+            res.json(authoritys);
         }, (err) => next(err))
         .catch((err) => next(err));
     }
     else{
-        dropdowns.find({})
-        .then((dropdowns) => {
+        authoritys.find({})
+        .then((authoritys) =>{
             res.statusCode=200;
             res.setHeader('Content-Type','application/json');
-            res.json(dropdowns);
+            res.json(authoritys);
         }, (err) => next(err))
         .catch((err) => next(err));
     }
 })
 .post(authenticate.authenticateToken, (req, res, next) =>{
-    dropdowns.create(req.body)
-    .then((dropdown) =>{
-        if(dropdown.message == error.RECORD_ERROR){
+    authoritys.create(req.body)
+    .then((authority) =>{
+        if(authority.message == error.RECORD_ERROR){
             res.statusCode=400;
             res.end();
         }
         else{
             res.statusCode=201;
             res.setHeader('Content-Type','application/json');
-            res.json(dropdown);
+            res.json(authority);
         }
-        
     }, (err) => next(err))
     .catch((err) => next(err));
 });
 
-dropdownRouter.route('/:uuid')
+authorityRouter.route('/:uuid')
 .get(authenticate.authenticateToken, (req, res, next) =>{
-    dropdowns.findById(req.params.uuid)
-    .then((dropdown) =>{
-        res.statusCode = 200;
+    authoritys.findById(req.params.uuid)
+    .then((authority) => {
+        res.statusCode=200;
         res.setHeader('Content-Type','application/json');
-        res.json(dropdown);
+        res.json(authority);
     }, (err) => next(err))
     .catch((err) => next(err));
 })
 .put(authenticate.authenticateToken, (req, res, next) =>{
-    dropdowns.findByIdAndUpdate(req.params.uuid, req.body)
-    .then((dropdown) =>{    
-        if(dropdown.message == error.RECORD_ERROR){
+    authoritys.findByIdAndUpdate(req.params.uuid, req.body)
+    .then((authority) =>{
+        if(authority.message == error.RECORD_ERROR){
             res.statusCode=400;
             res.end();
         }
         else{
-            res.statusCode =200;
+            res.statusCode=200;
             res.setHeader('Content-Type','application/json');
-            res.json(dropdown);
+            res.json(authority);
         }
     }, (err) => next(err))
     .catch((err) => next(err));
 })
 .delete(authenticate.authenticateToken, (req, res, next) =>{
-    dropdowns.findByIdAndRemove(req.params.uuid)
+    authoritys.findByIdAndRemove(req.params.uuid)
     .then((resp) => {
         if(resp.message == error.RECORD_ERROR){
             res.statusCode=400;
@@ -89,4 +88,4 @@ dropdownRouter.route('/:uuid')
     .catch((err) => next(err));
 });
 
-module.exports = dropdownRouter;
+module.exports = authorityRouter;
