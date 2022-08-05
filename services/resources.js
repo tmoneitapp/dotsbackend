@@ -4,22 +4,20 @@ const config = require('../config');
 const error = require('../shared/error');
 
 async function find(query){
-    let sql = '';
-    if(query.type){
-        sql = `SELECT * FROM dropdown WHERE type ='${query.type}'`
+    let sql='';
+    if(query.group){
+        sql =`SELECT * FROM resources WHERE group='${query.group}'`
     }
-    else {
-        sql = `SELECT * FROM dropdown`
+    else{
+        sql =`SELECT * FROM resources`
     }
-    const rows = await db.query(
-        sql
-    )
+    const rows = await db.query(sql)
     return rows;
 }
 
 async function findById(id){
     const rows = await db.query(
-        `SELECT * FROM dropdown WHERE uuid='${id}'`
+        `SELECT * FROM resources WHERE uuid='${id}'`
     );
     if(rows.length!=0){
         return rows[0];
@@ -27,32 +25,24 @@ async function findById(id){
     return error.RECORD_EMPTY;
 }
 
-async function findByIdAndUpdate(id, dropdown){
-    let sql ='UPDATE dropdown SET ';
+async function findByIdAndUpdate(id, resources){
+    let sql='UPDATE resources SET ';
     let sqlvalue ='';
 
-    if(dropdown.type){
+    if(resources.user_id){
         if(sqlvalue!='') sqlvalue+=','
-        sqlvalue += `type='${dropdown.type}'`
+        sqlvalue += `user_id='${resources.user_id}'`
     }
-    if(dropdown.value){
+    if(resources.group){
         if(sqlvalue!='') sqlvalue+=','
-        sqlvalue += `value='${dropdown.value}'`
-    }
-    if(dropdown.display){
-        if(sqlvalue!='') sqlvalue+=','
-        sqlvalue += `display='${dropdown.display}'`
-    }
-    if(dropdown.disabled){
-        if(sqlvalue!='') sqlvalue+=','
-        sqlvalue += `disabled='${dropdown.disabled}'`
+        sqlvalue += `group='${resources.group}'`
     }
     sql += sqlvalue + ` WHERE uuid='${id}'`
-    
+
     let message = error.RECORD_ERROR;
     const result = await db.query(sql)
     if(result.affectedRows){
-        const rows = await db.query(`SELECT * FROM dropdown where uuid = '${id}'`)
+        const rows = await db.query(`SELECT * FROM resources WHERE id='${result.insertId}'`)
         return rows[0];
     }
     return {message}
@@ -60,7 +50,7 @@ async function findByIdAndUpdate(id, dropdown){
 
 async function findByIdAndRemove(id){
     const result = await db.query(
-        `DELETE FROM dropdown WHERE uuid='${id}'`
+        `DELETE FROM resources WHERE uuid='${id}'`
     );
     let message = error.RECORD_ERROR;
     if(result.affectedRows){
@@ -69,16 +59,16 @@ async function findByIdAndRemove(id){
     return {message}
 }
 
-async function create(dropdown){
-    let sql = `INSERT INTO dropdown(uuid, type, value, display, disabled)
-            VALUES(uuid(), '${dropdown.type}','${dropdown.value}','${dropdown.display}',0)`
-    
+async function create(resources){
+    let sql = `INSERT INTO resources(uuid, user_id, group)
+            VALUES(uuid(), '${resources.user_id}','${resources.group}')`
+
     let message = error.RECORD_ERROR;
     try {
         const result = await db.query(sql)
-        
+
         if(result.affectedRows){
-            const rows = await db.query(`SELECT * FROM dropdown where id = '${result.insertId}'`)
+            const rows = await db.query(`SELECT * FROM resources WHERE id='${result.insertId}'`)
             return rows[0];
         }
         return {message}

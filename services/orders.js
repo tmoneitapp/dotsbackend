@@ -16,7 +16,7 @@ async function getMultiple(){
 async function getDashboard_OrderType(){
     const rows = await db.query(
         `SELECT id, order_type
-        FROM orders LIMIT 2000`
+        FROM orders`
     );
     return rows;
 }
@@ -24,7 +24,7 @@ async function getDashboard_OrderType(){
 async function getDashboard_ProductType(){
     const rows = await db.query(
         `SELECT id, product_type
-        FROM orders LIMIT 2000`
+        FROM orders`
     );
     return rows;
 }
@@ -132,7 +132,7 @@ async function create2(order){
     if(order.sc_name === undefined) order.sc_name='';
     if(order.sd_manager === undefined) order.sd_manager='';
 
-    let sql =  `INSERT INTO orders(order_type, service_id, network_id, product_type 
+    let sql =  `INSERT INTO orders(uuid, order_type, service_id, network_id, product_type 
             , customer, customer_id, quantity, others
             , remark, wiring, app_date, ae_name
             , staff_id, pm_name, tid_manager, ae_no
@@ -146,7 +146,7 @@ async function create2(order){
             , name4, type4, size4, content4
             , sc_name, sd_manager, pricing, quartely
             , yearly
-            ) VALUES ('${order.order_type}', '${order.service_id}', '${order.network_id}', '${order.product_type}'
+            ) VALUES (uuid(), '${order.order_type}', '${order.service_id}', '${order.network_id}', '${order.product_type}'
             , '${order.customer}', '${order.customer_id}', '${order.quantity}', '${order.others}'
             , '${order.remark}', '${order.wiring}', '${order.app_date}', '${order.ae_name}'
             , '${order.staff_id}', '${order.pm_name}', '${order.tid_manager}', '${order.ae_no}'
@@ -338,7 +338,7 @@ async function create(order){
     if(order.sc_name === undefined) order.sc_name='';
     if(order.sd_manager === undefined) order.sd_manager='';
 
-    let sql =  `INSERT INTO orders(order_type, service_id, network_id, product_type 
+    let sql =  `INSERT INTO orders(uuid, order_type, service_id, network_id, product_type 
             , customer, customer_id, quantity, others
             , remark, wiring, app_date, ae_name
             , staff_id, pm_name, tid_manager, ae_no
@@ -354,7 +354,7 @@ async function create(order){
             , name6, type6, size6, content6
             , sc_name, sd_manager, pricing, quartely
             , yearly
-            ) VALUES ('${order.order_type}', '${order.service_id}', '${order.network_id}', '${order.product_type}'
+            ) VALUES (uuid(), '${order.order_type}', '${order.service_id}', '${order.network_id}', '${order.product_type}'
             , '${order.customer}', '${order.customer_id}', '${order.quantity}', '${order.others}'
             , '${order.remark}', '${order.wiring}', '${order.app_date}', '${order.ae_name}'
             , '${order.staff_id}', '${order.pm_name}', '${order.tid_manager}', '${order.ae_no}'
