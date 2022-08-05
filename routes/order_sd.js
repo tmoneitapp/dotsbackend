@@ -72,7 +72,7 @@ orderSdRouter
       )
       .catch((err) => next(err));
   })
-  .put(authenticate.authenticate, (req, res, next) => {
+  .put(authenticate.authenticateToken, (req, res, next) => {
     order_sds
       .findByIdAndUpdate(req.params.uuid, req.body)
       .then(
