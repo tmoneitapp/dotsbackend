@@ -16,7 +16,7 @@ async function getMultiple() {
 async function getDashboard_OrderType() {
   const rows = await db.query(
     `SELECT id, order_type
-        FROM orders`
+        FROM orders WHERE isdeleted=0 `
   );
   return rows;
 }
@@ -24,7 +24,7 @@ async function getDashboard_OrderType() {
 async function getDashboard_ProductType() {
   const rows = await db.query(
     `SELECT id, product_type
-        FROM orders`
+        FROM orders WHERE isdeleted=0 `
   );
   return rows;
 }
@@ -33,9 +33,47 @@ async function findById(id) {
   const rows = await db.query(
     `SELECT * 
         FROM orders 
-        WHERE id = ${id}`
+        WHERE id = ${id} or uuid='${id}'`
   );
+
+  for (var i = 0; i <= rows.length - 1; i++) {
+    rows[i].attachment = [];
+    const res = await db.query(
+      `SELECT id, attachment_type, name, type, size, path FROM order_attachment WHERE order_id='${rows[i].uuid}'`
+    );
+    if (res) {
+      rows[i].attachment = res;
+    }
+  }
+
   return rows[0];
+}
+
+async function findById2(id) {
+  const rows = await db.query(
+    `SELECT *  
+        FROM orders 
+        WHERE id = '${id}' or uuid='${id}'`
+  );
+
+  for (var i = 0; i <= rows.length - 1; i++) {
+    rows[i].attachment = [];
+    const res = await db.query(
+      `SELECT id, attachment_type, name, type, size, path FROM order_attachment WHERE order_id='${rows[i].uuid}'`
+    );
+    if (res) {
+      rows[i].attachment = res;
+    }
+  }
+
+  return rows;
+}
+
+async function findAttachment(id) {
+  const rows = await db.query(
+    `SELECT id, attachment_type, name, type, size, path FROM order_attachment WHERE order_id='${id}'`
+  );
+  return rows;
 }
 
 async function findAll(page, numPerPage, query) {
@@ -51,10 +89,51 @@ async function findAll(page, numPerPage, query) {
     sql = `SELECT * FROM orders LIMIT ${offset},${numPerPage}`;
   }
   const rows = await db.query(sql);
+
+  for (var i = 0; i <= rows.length - 1; i++) {
+    rows[i].attachment = [];
+    const res = await db.query(
+      `SELECT id, attachment_type, name, type, size, path FROM order_attachment WHERE order_id='${rows[i].uuid}'`
+    );
+    if (res) {
+      rows[i].attachment = res;
+    }
+    //console.log(rows[i]);
+  }
+
   const data = helper.emptyOrRows(rows);
   const meta = { page };
 
   return { data, meta };
+}
+
+async function findAll2(page, numPerPage, query) {
+  if (!page) page = 1;
+  if (!numPerPage) numPerPage = config.numPerPage;
+  const offset = helper.getOffset(page, numPerPage);
+
+  let sql = "";
+
+  if (query.status) {
+    sql = `SELECT * FROM orders WHERE form_status='${query.status}' LIMIT ${offset},${numPerPage}`;
+  } else {
+    sql = `SELECT * FROM orders LIMIT ${offset},${numPerPage}`;
+  }
+
+  await db
+    .query(sql)
+    .then((orders) => {})
+    .then((res) => {
+      console.log(res);
+    })
+    .catch((err) => next(err));
+
+  //   const rows = await db.query(sql);
+
+  //   const data = helper.emptyOrRows(rows);
+  //   const meta = { page };
+
+  //   return { data, meta };
 }
 
 async function find(query) {
@@ -74,32 +153,32 @@ async function create2(order) {
   var files = order.files;
   var order = order.body;
 
-  if (files) {
-    if (files["file1"]) {
-      order.name = files["file1"][0].originalname;
-      order.type = files["file1"][0].mimetype;
-      order.size = files["file1"][0].size;
-      order.content = files["file1"][0].buffer.toString("base64");
-    }
-    if (files["file2"]) {
-      order.name2 = files["file2"][0].originalname;
-      order.type2 = files["file2"][0].mimetype;
-      order.size2 = files["file2"][0].size;
-      order.content2 = files["file2"][0].buffer.toString("base64");
-    }
-    if (files["file3"]) {
-      order.name3 = files["file3"][0].originalname;
-      order.type3 = files["file3"][0].mimetype;
-      order.size3 = files["file3"][0].size;
-      order.content3 = files["file3"][0].buffer.toString("base64");
-    }
-    if (files["file4"]) {
-      order.name4 = files["file4"][0].originalname;
-      order.type4 = files["file4"][0].mimetype;
-      order.size4 = files["file4"][0].size;
-      order.content4 = files["file4"][0].buffer.toString("base64");
-    }
-  }
+  //   if (files) {
+  //     if (files["file1"]) {
+  //       order.name = files["file1"][0].originalname;
+  //       order.type = files["file1"][0].mimetype;
+  //       order.size = files["file1"][0].size;
+  //       order.content = files["file1"][0].buffer.toString("base64");
+  //     }
+  //     if (files["file2"]) {
+  //       order.name2 = files["file2"][0].originalname;
+  //       order.type2 = files["file2"][0].mimetype;
+  //       order.size2 = files["file2"][0].size;
+  //       order.content2 = files["file2"][0].buffer.toString("base64");
+  //     }
+  //     if (files["file3"]) {
+  //       order.name3 = files["file3"][0].originalname;
+  //       order.type3 = files["file3"][0].mimetype;
+  //       order.size3 = files["file3"][0].size;
+  //       order.content3 = files["file3"][0].buffer.toString("base64");
+  //     }
+  //     if (files["file4"]) {
+  //       order.name4 = files["file4"][0].originalname;
+  //       order.type4 = files["file4"][0].mimetype;
+  //       order.size4 = files["file4"][0].size;
+  //       order.content4 = files["file4"][0].buffer.toString("base64");
+  //     }
+  //   }
 
   if (order.order_type === undefined) order.order_type = "";
   if (order.service_id === undefined) order.service_id = "";
@@ -157,10 +236,7 @@ async function create2(order) {
             , sfdc_id, vertical, hqstate, contract_no
             , scope, submission_category, po_date, project_single
             , sitename, contact_no, assign_by
-            , name, type, size, content
-            , name2, type2, size2, content2
-            , name3, type3, size3, content3
-            , name4, type4, size4, content4
+            
             , sc_name, sd_manager, pricing, quartely
             , yearly
             ) VALUES (uuid(), '${order.order_type}', '${order.service_id}', '${order.network_id}', '${order.product_type}'
@@ -171,10 +247,7 @@ async function create2(order) {
             , '${order.sfdc_id}', '${order.vertical}', '${order.hqstate}', '${order.contract_no}'
             , '${order.scope}', '${order.submission_category}', '${order.po_date}', '${order.project_single}'
             , '${order.sitename}', '${order.contact_no}', '${order.assign_by}'
-            , '${order.name}', '${order.type}', '${order.size}', '${order.content}'
-            , '${order.name2}', '${order.type2}', '${order.size2}', '${order.content2}'
-            , '${order.name3}', '${order.type3}', '${order.size3}', '${order.content3}'
-            , '${order.name4}', '${order.type4}', '${order.size4}', '${order.content4}'
+           
             , '${order.sc_name}', '${order.sd_manager}', '${order.pricing}', '${order.quartely}'
             , '${order.yearly}'
             )`;
@@ -189,65 +262,61 @@ async function create2(order) {
   await db
     .query(sql)
     .then((result) => {
+      console.log(result);
       if (result.affectedRows) {
-        console.log(result);
-        if (files) {
-          let sql2 = `INSERT INTO order_attachment (id,
-                    name, type, size, content,
-                    name2, type2, size2, content2,
-                    name3, type3, size3, content3,
-                    name4, type4, size4, content4) VALUES (
-                    '${result.insertId}'
-                    , '${order.name}', '${order.type}', '${order.size}', '${order.content}'
-                    , '${order.name2}', '${order.type2}', '${order.size2}', '${order.content2}'
-                    , '${order.name3}', '${order.type3}', '${order.size3}', '${order.content3}'
-                    , '${order.name4}', '${order.type4}', '${order.size4}', '${order.content4}'
-                    )`;
-
-          const result2 = db.query(sql2);
-          if (result2.affectedRows) {
-            message = error.RECORD_CREATED;
-          }
-          return { message };
-        } else {
-          message = error.RECORD_CREATED;
-          return { message };
-        }
+        db.query(`SELECT uuid FROM orders WHERE id='${result.insertId}'`)
+          .then(
+            (result1) => {
+              //console.log(result1);
+              if (files) {
+                //console.log(files);
+                let sql2 =
+                  "INSERT INTO order_attachment(order_id, attachment_type, name, type, size, path) VALUES ";
+                let sql2value = "";
+                if (files["file1"]) {
+                  if (sql2value != "") sql2value += ",";
+                  sql2value += `('${result1[0].uuid}','${files["file1"][0].fieldname}','${files["file1"][0].originalname}','${files["file1"][0].mimetype}','${files["file1"][0].size}','${files["file1"][0].path}')`;
+                }
+                if (files["file2"]) {
+                  if (sql2value != "") sql2value += ",";
+                  sql2value += `('${result1[0].uuid}','${files["file2"][0].fieldname}','${files["file2"][0].originalname}','${files["file2"][0].mimetype}','${files["file2"][0].size}','${files["file2"][0].path}')`;
+                }
+                if (files["file3"]) {
+                  if (sql2value != "") sql2value += ",";
+                  sql2value += `('${result1[0].uuid}','${files["file3"][0].fieldname}','${files["file3"][0].originalname}','${files["file3"][0].mimetype}','${files["file3"][0].size}','${files["file3"][0].path}')`;
+                }
+                if (files["file4"]) {
+                  if (sql2value != "") sql2value += ",";
+                  sql2value += `('${result1[0].uuid}','${files["file4"][0].fieldname}','${files["file4"][0].originalname}','${files["file4"][0].mimetype}','${files["file4"][0].size}','${files["file4"][0].path}')`;
+                }
+                if (files["file5"]) {
+                  if (sql2value != "") sql2value += ",";
+                  sql2value += `('${result1[0].uuid}','${files["file5"][0].fieldname}','${files["file5"][0].originalname}','${files["file5"][0].mimetype}','${files["file5"][0].size}','${files["file5"][0].path}')`;
+                }
+                if (files["file6"]) {
+                  if (sql2value != "") sql2value += ",";
+                  sql2value += `('${result1[0].uuid}','${files["file6"][0].fieldname}','${files["file6"][0].originalname}','${files["file6"][0].mimetype}','${files["file6"][0].size}','${files["file6"][0].path}')`;
+                }
+                sql2 += sql2value.replace(/\\/g, "\\\\");
+                //console.log(sql2);
+                const result2 = db.query(sql2);
+                if (result2.affectedRows) {
+                  message = error.RECORD_CREATED;
+                }
+                return { message };
+              } else {
+                message = error.RECORD_CREATED;
+                return { message };
+              }
+            },
+            (err) => next(err)
+          )
+          .catch((err) => next(err));
       } else {
         return { message };
       }
     })
     .catch((err) => next(err));
-
-  //console.log(result);
-
-  // if(result.affectedRows){
-  //     message = error.RECORD_CREATED;
-  // }
-  // return {message};
-
-  // const result = await db.query(
-  //     sql
-  //  );
-  //  console.log(result);
-  //  let message = error.RECORD_ERROR;
-  //  if(result.affectedRows){
-  //      message = error.RECORD_CREATED;
-  //  }
-  //  return {message};
-
-  //     var fileSize = getFilesizeInBytes(temp_path);
-  //     var buffer = new Buffer(fileSize);
-  //     fs.read(fd, buffer, 0, fileSize, 0, function (err, num) {
-
-  //         var query = "INSERT INTO files SET ?",
-  //             values = {
-  //                 file_type: 'img',
-  //                 file_size: buffer.length,
-  //                 file: buffer
-  //             };
-  //         mySQLconnection.query(query, values, function (er, da) {
-  //             if(er)throw er;
 }
 
 async function create(order) {
@@ -415,7 +484,7 @@ async function findByIdAndUpdate(id, order) {
   var order = order.body;
 
   let sql = "UPDATE orders SET ";
-  let sqlvalue = "";
+  let sqlvalue = "updateAt =current_timestamp ";
 
   if (files) {
     if (files["file1"]) {
@@ -726,14 +795,6 @@ async function findByIdAndUpdate(id, order) {
     if (sqlvalue != "") sqlvalue += ",";
     sqlvalue += `content9 ='${order.content9}'`;
   }
-  // if(order.order_type){
-  //     if(sqlvalue!='') sqlvalue+=','
-  //     sqlvalue += `order_type ='${order.order_type}'`
-  // }
-  // if(order.order_type){
-  //     if(sqlvalue!='') sqlvalue+=','
-  //     sqlvalue += `order_type ='${order.order_type}'`
-  // }
 
   sql += sqlvalue + ` WHERE id='${id}'`;
   //console.log(sql);
@@ -762,8 +823,10 @@ module.exports = {
   getDashboard_OrderType,
   getDashboard_ProductType,
   findById,
+  findById2,
   find,
   findAll,
+  findAll2,
   create,
   create2,
   findByIdAndUpdate,

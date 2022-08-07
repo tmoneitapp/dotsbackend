@@ -1,17 +1,24 @@
 var express = require("express");
 var bodyParser = require("body-parser");
-var orders = require("../services/orders");
 var authenticate = require("../services/authenticate");
 var error = require("../shared/error");
 var multer = require("multer");
 
+var orders = require("../services/orders");
+var order_task = require("../services/order_task");
+
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, os.tmpdir());
+    cb(null, "public/uploads");
   },
 
   filename: (req, file, cb) => {
-    cb(null, file.originalname);
+    cb(
+      null,
+      parseInt((new Date().getTime() / 1000).toFixed(0)) +
+        "-" +
+        file.originalname
+    );
   },
 });
 
@@ -23,8 +30,11 @@ const fileFilter = (req, file, cb) => {
 };
 
 const upload = multer({
-  //storage: storage
-  storage: multer.memoryStorage(),
+  storage: storage,
+
+  //used to store upload file as blob in database
+  //storage: multer.memoryStorage(),
+
   //fileFilter: fileFilter,
   // limits: {
   //     fileSize: 5 * 1024 * 1024, // no larger than 5mb
@@ -71,7 +81,7 @@ orderRouter.use(bodyParser.json());
 orderRouter.route("/upload").post(
   uploadMultiple,
   (req, res, next) => {
-    //console.log('reach here');
+    console.log("reach here");
     if (req.files) {
       console.log(req.files);
 
@@ -125,12 +135,12 @@ orderRouter
       //     }
       // }
       //console.log('post body: ' + req.body);
-
+      //console.log("reach create v2");
       orders
         .create2(req)
         .then(
           (order) => {
-            console.log("Order with attachment created", order);
+            console.log("Order with attachment created", order.message);
             res.statusCode = 201;
             res.setHeader("Content-Type", "application/json");
             res.json(order);
@@ -244,6 +254,8 @@ orderRouter
       .findById(req.params.orderId)
       .then(
         (order) => {
+          console.log("route result");
+          console.log(order);
           res.statusCode = 200;
           res.setHeader("Content-Type", "application/json");
           res.json(order);
@@ -344,6 +356,46 @@ orderRouter
   .delete(authenticate.authenticateToken, (req, res, next) => {
     res.statusCode = 403;
     res.end("DELETE operation not ready on /orders");
+  });
+
+orderRouter
+  .route("/:orderId/tasks")
+  .get(authenticate.authenticateToken, (req, res, next) => {
+    order_task
+      .findById(req.params.orderId)
+      .then(
+        (order_task) => {
+          if (order_task == error.RECORD_EMPTY) {
+            res.statusCode = 200;
+            res.setHeader("Content-Type", "application/json");
+            res.json({});
+          } else {
+            res.statusCode = 200;
+            res.setHeader("Content-Type", "application/json");
+            res.json(order_task);
+          }
+        },
+        (err) => next(err)
+      )
+      .catch((err) => next(err));
+  })
+  .put(authenticate.authenticateToken, (req, res, next) => {
+    order_task
+      .findByIdAndUpdate(req.params.orderId, req.body)
+      .then(
+        (order_task) => {
+          if (order_task.message == error.RECORD_ERROR) {
+            res.statusCode = 400;
+            res.end();
+          } else {
+            res.statusCode = 200;
+            res.setHeader("Content-Type", "application/json");
+            res.json(order_task);
+          }
+        },
+        (err) => next(err)
+      )
+      .catch((err) => next(err));
   });
 
 module.exports = orderRouter;
