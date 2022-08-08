@@ -72,6 +72,9 @@ app.use("/api/resources", resourceRouter);
 var orderSdRouter = require("./routes/order_sd");
 app.use("/api/order_sd", orderSdRouter);
 
+var orderIsomRouter = require("./routes/order_isom");
+app.use("/api/order_isom", orderIsomRouter);
+
 var notificationRouter = require("./routes/notifications");
 app.use("/api/notifications", notificationRouter);
 
