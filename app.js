@@ -43,11 +43,13 @@ app.use("/api/orders", ordersRouter);
 var dashboardRouter = require("./routes/dashboard");
 app.use("/api/dashboard", dashboardRouter);
 
+// TODO: remove after stable
 var cdyRouter = require("./routes/cdy");
 app.use("/api/cdys", cdyRouter);
 
 var pmRouter = require("./routes/pm");
 app.use("/api/pms", pmRouter);
+// TODO: end
 
 var orderTypeRouter = require("./routes/ordertype");
 app.use("/api/ordertypes", orderTypeRouter);

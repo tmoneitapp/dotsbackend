@@ -224,28 +224,29 @@ orderRouter
     res.end("DELETE operation not ready on /orders");
   });
 
-orderRouter
-  .route("/filter")
-  .get(authenticate.authenticateToken, (req, res, next) => {
-    if (req.query.status) {
-      const status = req.query.status;
-      orders
-        .find({ status: status })
-        .then(
-          (orders) => {
-            res.statusCode = 200;
-            res.setHeader("Content-Type", "application/json");
-            res.json(orders);
-          },
-          (err) => next(err)
-        )
-        .catch((err) => next(err));
-    } else {
-      // return bad request by default
-      res.statusCode = 400;
-      res.end();
-    }
-  });
+// TODO: remove after stable
+// orderRouter
+//   .route("/filter")
+//   .get(authenticate.authenticateToken, (req, res, next) => {
+//     if (req.query.status) {
+//       const status = req.query.status;
+//       orders
+//         .find({ status: status })
+//         .then(
+//           (orders) => {
+//             res.statusCode = 200;
+//             res.setHeader("Content-Type", "application/json");
+//             res.json(orders);
+//           },
+//           (err) => next(err)
+//         )
+//         .catch((err) => next(err));
+//     } else {
+//       // return bad request by default
+//       res.statusCode = 400;
+//       res.end();
+//     }
+//   });
 
 orderRouter
   .route("/:orderId")
@@ -309,6 +310,7 @@ orderRouter
         .findByIdAndUpdate(req.params.orderId, req)
         .then(
           (order) => {
+            //console.log(order);
             if (order.message == error.RECORD_ERROR) {
               res.statusCode = 400;
               res.end();
