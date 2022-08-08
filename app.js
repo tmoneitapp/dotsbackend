@@ -72,6 +72,9 @@ app.use("/api/resources", resourceRouter);
 var orderSdRouter = require("./routes/order_sd");
 app.use("/api/order_sd", orderSdRouter);
 
+var notificationRouter = require("./routes/notifications");
+app.use("/api/notifications", notificationRouter);
+
 var swaggerUi = require("swagger-ui-express"),
   swaggerDocument = require("./swagger.json");
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
