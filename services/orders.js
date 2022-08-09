@@ -97,7 +97,6 @@ async function findAll(page, numPerPage, query) {
   }
 
   sql += ` ORDER BY id DESC LIMIT ${offset},${numPerPage}`;
-  sqlcount += ` ORDER BY id DESC LIMIT ${offset},${numPerPage}`;
 
   // else {
   //   sql = `SELECT * FROM orders WHERE isdeleted=0 LIMIT ${offset},${numPerPage}`;
