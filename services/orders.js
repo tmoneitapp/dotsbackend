@@ -96,8 +96,8 @@ async function findAll(page, numPerPage, query) {
     sqlcount += ` AND (customer like '%${query.filter}%' OR sitename like '%${query.filter}%' OR sfdc_id like '%${query.filter}%')`;
   }
 
-  sql += ` LIMIT ${offset},${numPerPage}`;
-  sqlcount += ` LIMIT ${offset},${numPerPage}`;
+  sql += ` ORDER BY id DESC LIMIT ${offset},${numPerPage}`;
+  sqlcount += ` ORDER BY id DESC LIMIT ${offset},${numPerPage}`;
 
   // else {
   //   sql = `SELECT * FROM orders WHERE isdeleted=0 LIMIT ${offset},${numPerPage}`;
