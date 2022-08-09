@@ -72,6 +72,24 @@ notificationRouter
       )
       .catch((err) => next(err));
   })
+  .put(authenticate.authenticateToken, (req, res, next) => {
+    notifications
+      .findByIdAndUpdate(req.params.uuid, req.body)
+      .then(
+        (notification) => {
+          if (notification.message == error.RECORD_ERROR) {
+            res.statusCode = 400;
+            res.end();
+          } else {
+            res.statusCode = 200;
+            res.setHeader("Content-Type", "application/json");
+            res.json(notification);
+          }
+        },
+        (err) => next(err)
+      )
+      .catch((err) => next(err));
+  })
   .delete(authenticate.authenticateToken, (req, res, next) => {
     notifications
       .findByIdAndRemove(req.params.uuid)

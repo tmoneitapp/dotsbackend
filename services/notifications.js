@@ -31,9 +31,40 @@ async function findByIdAndRemove(id) {
   return { message };
 }
 
+async function findByIdAndUpdate(id, item) {
+  let sql = "UPDATE notifications SET ";
+  let sqlvalue = "updateAt = current_timestamp ";
+
+  if (item.title) {
+    sqlvalue += `,title='${item.title}'`;
+  }
+  if (item.content) {
+    sqlvalue += `,content='${item.content}'`;
+  }
+  if (item.link) {
+    sqlvalue += `,link='${item.link}'`;
+  }
+  if (item.active) {
+    sqlvalue += `,active='${item.active}'`;
+  }
+  if (item.color) {
+    sqlvalue += `,color='${item.color}'`;
+  }
+  sql += sqlvalue + ` WHERE uuid='${id}'`;
+  let message = error.RECORD_ERROR;
+  const result = await db.query(sql);
+  if (result.affectedRows) {
+    const rows = await db.query(
+      `SELECT * FROM notifications WHERE uuid='${id}'`
+    );
+    return rows[0];
+  }
+  return { message };
+}
+
 async function create(notification) {
-  let sql = `INSERT INTO notifications(uuid, user_id, title, content, link)
-            VALUES(uuid(), '${notification.user_id}','${notification.title}','${notification.content}','${notification.link}')`;
+  let sql = `INSERT INTO notifications(uuid, user_id, title, content, link, color)
+            VALUES(uuid(), '${notification.user_id}','${notification.title}','${notification.content}','${notification.link}','${notification.color}')`;
 
   let message = error.RECORD_ERROR;
   try {
@@ -56,5 +87,6 @@ module.exports = {
   find,
   findById,
   findByIdAndRemove,
+  findByIdAndUpdate,
   create,
 };
