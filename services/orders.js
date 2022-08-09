@@ -81,16 +81,28 @@ async function findAll(page, numPerPage, query) {
   if (!numPerPage) numPerPage = config.numPerPage;
   const offset = helper.getOffset(page, numPerPage);
 
-  let sql = "";
-  let sqlcount = "";
+  let sql = "SELECT * FROM orders WHERE isdeleted=0 ";
+  let sqlcount = "SELECT count(*) as numRows FROM orders WHERE isdeleted=0 ";
 
   if (query.status) {
-    sql = `SELECT * FROM orders WHERE isdeleted=0 and form_status='${query.status}' LIMIT ${offset},${numPerPage}`;
-    sqlcount = `SELECT count(*) as numRows FROM orders WHERE isdeleted=0 and form_status='${query.status}'`;
-  } else {
-    sql = `SELECT * FROM orders WHERE isdeleted=0 LIMIT ${offset},${numPerPage}`;
-    sqlcount = `SELECT count(*) as numRows FROM orders WHERE isdeleted=0`;
+    sql += ` AND form_status='${query.status}'`;
+    sqlcount += ` AND form_status='${query.status}'`;
+
+    // sql = `SELECT * FROM orders WHERE isdeleted=0 and form_status='${query.status}' LIMIT ${offset},${numPerPage}`;
+    // sqlcount = `SELECT count(*) as numRows FROM orders WHERE isdeleted=0 and form_status='${query.status}'`;
   }
+  if (query.filter) {
+    sql += ` AND (customer like '%${query.filter}%' OR sitename like '%${query.filter}%' OR sfdc_id like '%${query.filter}%')`;
+    sqlcount += ` AND (customer like '%${query.filter}%' OR sitename like '%${query.filter}%' OR sfdc_id like '%${query.filter}%')`;
+  }
+
+  sql += ` LIMIT ${offset},${numPerPage}`;
+  sqlcount += ` LIMIT ${offset},${numPerPage}`;
+
+  // else {
+  //   sql = `SELECT * FROM orders WHERE isdeleted=0 LIMIT ${offset},${numPerPage}`;
+  //   sqlcount = `SELECT count(*) as numRows FROM orders WHERE isdeleted=0`;
+  // }
   const rows = await db.query(sql);
   const rowsCount = await db.query(sqlcount);
 

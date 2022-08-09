@@ -157,8 +157,9 @@ orderRouter
     const page = req.query.page;
     const numPerPage = req.query.numPerPage;
     const status = req.query.status;
+    const filter = req.query.filter;
     orders
-      .findAll(page, numPerPage, { status: status })
+      .findAll(page, numPerPage, { status, filter })
       .then(
         (orders) => {
           //console.log(orders);
