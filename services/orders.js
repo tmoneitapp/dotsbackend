@@ -77,7 +77,7 @@ async function findAttachment(id) {
 }
 
 async function findAll(page, numPerPage, query) {
-  if (!page) page = 1;
+  if (!page) page = 0;
   if (!numPerPage) numPerPage = config.numPerPage;
   const offset = helper.getOffset(page, numPerPage);
 
